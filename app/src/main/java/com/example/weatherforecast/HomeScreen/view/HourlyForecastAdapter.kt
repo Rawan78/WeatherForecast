@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.weatherforecast.databinding.ItemHourlyForecastBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -16,7 +17,7 @@ class HourlyForecastAdapter : RecyclerView.Adapter<HourlyForecastAdapter.ViewHol
 
     lateinit var binding: ItemHourlyForecastBinding
 
-    private val listOfTadayWeather = mutableListOf<WeatherList>()
+    private var listOfTadayWeather = mutableListOf<WeatherList>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater: LayoutInflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = ItemHourlyForecastBinding.inflate(inflater, parent, false)
@@ -44,16 +45,34 @@ class HourlyForecastAdapter : RecyclerView.Adapter<HourlyForecastAdapter.ViewHol
 
 
         // Set weather icon based on weather condition
-        val weatherIcon = todayForecast.weather.firstOrNull()?.icon
-        val iconResourceId = getWeatherIconResourceId(weatherIcon)
-        if (iconResourceId != null) {
-            holder.binding.imageViewCondition.setImageResource(iconResourceId)
+//        val weatherIcon = todayForecast.weather.firstOrNull()?.icon
+//        val iconResourceId = getWeatherIconResourceId(weatherIcon)
+//        if (iconResourceId != null) {
+//            holder.binding.imageViewCondition.setImageResource(iconResourceId)
+//        }
+
+        val weatherIcon = todayForecast.weather?.getOrNull(0)?.icon
+        weatherIcon?.let {
+            Glide.with(holder.itemView.context)
+                .load("https://openweathermap.org/img/wn/$it@2x.png")
+                .into(holder.binding.imageViewCondition)
         }
     }
 
     fun setList(listOfTaday: List<WeatherList>) {
-        listOfTadayWeather.clear()
-        listOfTadayWeather.addAll(listOfTaday)
+        val uniqueDates = HashSet<String>()
+
+        val filteredList = listOfTaday.filter { entry ->
+            val dateParts = entry.dt_txt.split(" ")[1]
+            if (uniqueDates.contains(dateParts)) {
+                false
+            } else {
+                uniqueDates.add(dateParts)
+                true
+            }
+        }
+
+        listOfTadayWeather = filteredList.toMutableList()
         notifyDataSetChanged()
     }
 

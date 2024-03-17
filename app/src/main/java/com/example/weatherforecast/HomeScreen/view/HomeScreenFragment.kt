@@ -2,8 +2,7 @@ package com.example.weatherforecast.HomeScreen.view
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
+
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -17,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.weatherforecast.R
 import com.example.weatherforecast.network.*
 import com.example.weatherforecast.model.*
@@ -28,7 +28,6 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -123,7 +122,6 @@ class HomeScreenFragment : Fragment() {
             adapter = fiveDayForecastAdapter
         }
 
-        // Request location updates
         requestLocationUpdates()
 
         //homeScreenViewModel.getCurrentWeather(latitude, longitude)
@@ -189,11 +187,15 @@ class HomeScreenFragment : Fragment() {
         Log.i(TAG, "updateUI: sunrise : ${weatherResponse.city.sunrise}   ,, sunset : ${weatherResponse.city.sunset}")
 
         // Set weather icon
-        val weatherIconId = weatherResponse.list[0].weather.firstOrNull()?.icon
-        val iconResourceId = getWeatherIconResourceId(weatherIconId)
-        if (iconResourceId != null) {
-            currentIcon.setImageResource(iconResourceId)
-        }
+//        val weatherIconId = weatherResponse.list[0].weather.firstOrNull()?.icon
+//        val iconResourceId = getWeatherIconResourceId(weatherIconId)
+//        if (iconResourceId != null) {
+//            currentIcon.setImageResource(iconResourceId)
+//        }
+
+        Glide.with(this@HomeScreenFragment)
+            .load("https://openweathermap.org/img/wn/${weatherResponse.list[0].weather[0].icon}@2x.png")
+            .into(currentIcon)
 
         hourlyForecastAdapter.setList(weatherResponse.list)
         fiveDayForecastAdapter.setList(weatherResponse.list)

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.weatherforecast.WeatherList
 import com.example.weatherforecast.databinding.ItemDayForecastInHomeBinding
 import java.text.SimpleDateFormat
@@ -51,25 +52,31 @@ class FiveDaysForecastAdapter : RecyclerView.Adapter<FiveDaysForecastAdapter.Vie
         Log.i(TAG, "onBindViewHolder:$formattedTempMin°/$formattedTempMax° ")
 
         // Set weather icon
-        val weatherIconId = forecastObject.weather.firstOrNull()?.icon
-        val iconResourceId = getWeatherIconResourceId(weatherIconId)
-        if (iconResourceId != null) {
-            holder.binding.imageViewWeatherIcon.setImageResource(iconResourceId)
+//        val weatherIconId = forecastObject.weather.firstOrNull()?.icon
+//        val iconResourceId = getWeatherIconResourceId(weatherIconId)
+//        if (iconResourceId != null) {
+//            holder.binding.imageViewWeatherIcon.setImageResource(iconResourceId)
+//        }
+
+        val weatherIcon = forecastObject.weather?.getOrNull(0)?.icon
+        weatherIcon?.let {
+            Glide.with(holder.itemView.context)
+                .load("https://openweathermap.org/img/wn/$it@2x.png")
+                .into(holder.binding.imageViewWeatherIcon)
         }
+
     }
 
     fun setList(newList: List<WeatherList>) {
-        // Use a hash set to store the unique dates
         val uniqueDates = HashSet<String>()
 
-        // Filter the new list to include only the entries with unique dates
         val filteredList = newList.filter { entry ->
             val dateParts = entry.dt_txt.split(" ")[0]
             if (uniqueDates.contains(dateParts)) {
-                false // Not a unique date, filter it out
+                false
             } else {
                 uniqueDates.add(dateParts)
-                true // Unique date, keep it
+                true
             }
         }
 
