@@ -1,7 +1,15 @@
 package com.example.weatherforecast.model
 
-import com.example.weatherforecast.WeatherList
+import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
-    suspend fun getCurrentWeather(lat:Double , lon:Double): WeatherResponse
+
+    //From Retrofit
+    suspend fun getCurrentWeather(lat:Double , lon:Double): Flow<WeatherResponse>
+
+
+    //From ROOM
+    suspend fun getFavCitiesFromRoom(): Flow<List<FavoriteCity>>
+    suspend fun insertToFav(favoriteCity: FavoriteCity)
+    suspend fun deleteFromFav(favoriteCity: FavoriteCity)
 }

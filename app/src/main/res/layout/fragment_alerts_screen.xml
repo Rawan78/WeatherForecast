@@ -6,6 +6,132 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AlertScreen.view.AlertsScreenFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="234dp"
+        android:layout_margin="8dp"
+        android:background="@color/navyBlue">
+
+        <LinearLayout
+            android:id="@+id/linear_alarm_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+            android:padding="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Date -->
+            <TextView
+                android:id="@+id/textViewDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="Alarms on"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <!-- Weather Icon -->
+
+            <!-- Switch Button -->
+            <ImageView
+                android:id="@+id/iv_icn_alarm"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="5dp"
+                android:contentDescription="Weather Icon"
+                android:src="@drawable/alarm" />
+
+            <Switch
+                android:id="@+id/switch_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:checked="true"
+                android:thumbTint="@color/white"
+                android:trackTint="@color/black" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="14dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/card_view_location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/navyBlue"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="70dp"
+                android:text=" Alarm sound"
+
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                 />
+
+            <RadioGroup
+                android:id="@+id/radio_group_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_GPS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notification"
+                    android:textColor="@color/white"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radio_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No sound"
+                    android:textColor="@color/white"
+
+                     />
+
+            </RadioGroup>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_alarm"
         android:layout_width="wrap_content"
