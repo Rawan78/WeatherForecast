@@ -11,9 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -33,6 +36,12 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+import com.example.weatherforecast.db.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import com.example.weatherforecast.databinding.FragmentHomeScreenBinding
+
+
 
 class HomeScreenFragment : Fragment() {
 
@@ -50,6 +59,9 @@ class HomeScreenFragment : Fragment() {
     private lateinit var fiveDayForecastAdapter: FiveDaysForecastAdapter
     private lateinit var recyclerViewFiveDayForecast : RecyclerView
 
+    private lateinit var binding: FragmentHomeScreenBinding
+
+
 
     lateinit var currentTemperature: TextView
     lateinit var currentDate: TextView
@@ -63,6 +75,7 @@ class HomeScreenFragment : Fragment() {
     lateinit var currentClouds :TextView
     lateinit var currentSunrise : TextView
     lateinit var currentSunset : TextView
+    lateinit var progressBarHome: ProgressBar
 
     var latitude : Double = 0.0
     var longitude :Double = 0.0
@@ -88,8 +101,10 @@ class HomeScreenFragment : Fragment() {
         currentSunset = view.findViewById(R.id.tv_current_sunset)
         recyclerViewHourlyForecast = view.findViewById(R.id.rv_hourly_forecast)
         recyclerViewFiveDayForecast = view.findViewById(R.id.rv_5_day_forecast)
+        progressBarHome = view.findViewById(R.id.progressBarHome)
 
-        fusedClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        //fusedClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
 
         Log.i(TAG, "onCreateView: ")
 
@@ -98,14 +113,34 @@ class HomeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fusedClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
         homeScreenViewModelFactory = HomeScreenViewModelFactory(WeatherRepositoryImpl.getInstance
-            (WeatherRemoteDataSourceImpl.getInstance()))
+            (WeatherRemoteDataSourceImpl.getInstance() ,  WeatherLocalDataSourceImpl(requireContext())))
 
         homeScreenViewModel = ViewModelProvider(this, homeScreenViewModelFactory).get(HomeScreenViewModel::class.java)
 
-        homeScreenViewModel.currentWeather.observe(viewLifecycleOwner){
-                current ->
-            updateUI(current)
+        lifecycleScope.launch{
+            homeScreenViewModel.currentWeather.collectLatest{result ->
+                when (result){
+                    is WeatherState.Loading -> {
+                        progressBarHome.visibility = View.VISIBLE
+                        //recyclerViewFavoriteCities.visibility = View.GONE
+
+                        Log.i(TAG, "onCreate: loading")
+                    }
+                    is WeatherState.Success -> {
+                        updateUI(result.weatherResponse)
+                        progressBarHome.visibility = View.GONE
+                       // recyclerViewFavoriteCities.visibility = View.VISIBLE
+                       // favoriteCityAdapter.setCities(result.favoriteCity)
+                    }
+                    else -> {
+                        progressBarHome.visibility = View.GONE
+                        Toast.makeText(requireContext(), "Failed to fetch cities", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
         hourlyForecastAdapter = HourlyForecastAdapter()
@@ -124,7 +159,6 @@ class HomeScreenFragment : Fragment() {
 
         requestLocationUpdates()
 
-        //homeScreenViewModel.getCurrentWeather(latitude, longitude)
     }
 
     private fun updateUI(weatherResponse: WeatherResponse) {
@@ -135,16 +169,11 @@ class HomeScreenFragment : Fragment() {
 
         currentTemperature.text = "${temperatureFormatted}°C"
 
-//        val timeParts = weatherResponse.list[0].dt_txt.split(" ")[1]
-//        currentTime.text = timeParts
-
         val inputDate = SimpleDateFormat("yyyy-MM-dd HH:mm" , Locale.getDefault())
         val currDate = inputDate.parse(weatherResponse.list[0].dt_txt)
         val outputDate = SimpleDateFormat("d MMMM EEEE" , Locale.getDefault())
         val dateAndDayName = outputDate.format(currDate)
         currentDate.text = dateAndDayName
-
-
 
         val calendar = Calendar.getInstance()
         val timeFormat = SimpleDateFormat("HH:mm")
@@ -187,15 +216,15 @@ class HomeScreenFragment : Fragment() {
         Log.i(TAG, "updateUI: sunrise : ${weatherResponse.city.sunrise}   ,, sunset : ${weatherResponse.city.sunset}")
 
         // Set weather icon
-//        val weatherIconId = weatherResponse.list[0].weather.firstOrNull()?.icon
-//        val iconResourceId = getWeatherIconResourceId(weatherIconId)
-//        if (iconResourceId != null) {
-//            currentIcon.setImageResource(iconResourceId)
-//        }
+        val weatherIconId = weatherResponse.list[0].weather.firstOrNull()?.icon
+        val iconResourceId = getWeatherIconResourceId(weatherIconId)
+        if (iconResourceId != null) {
+            currentIcon.setImageResource(iconResourceId)
+        }
 
-        Glide.with(this@HomeScreenFragment)
-            .load("https://openweathermap.org/img/wn/${weatherResponse.list[0].weather[0].icon}@2x.png")
-            .into(currentIcon)
+//        Glide.with(this@HomeScreenFragment)
+//            .load("https://openweathermap.org/img/wn/${weatherResponse.list[0].weather[0].icon}@2x.png")
+//            .into(currentIcon)
 
         hourlyForecastAdapter.setList(weatherResponse.list)
         fiveDayForecastAdapter.setList(weatherResponse.list)
@@ -251,5 +280,4 @@ class HomeScreenFragment : Fragment() {
             fusedClient?.requestLocationUpdates(locationRequest, callback, Looper.myLooper())
         }
     }
-
 }

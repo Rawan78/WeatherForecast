@@ -11,18 +11,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <EditText
-        android:id="@+id/et_search"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_centerHorizontal="true"
-        android:hint="Search here"
-        android:textColorHint="@color/lightGray"
-        android:padding="8dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:backgroundTint="@color/navyBlue"
-        android:textColor="@android:color/white"
-        android:textSize="16dp" />
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/add_icon"
+        android:contentDescription="add_icon"
+        app:backgroundTint="@color/navyBlue"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        app:shapeAppearanceOverlay="@style/RoundedShapeAppearance" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/view_icon"
+        android:contentDescription="view_icon"
+        app:backgroundTint="@color/navyBlue"
+        android:layout_above="@id/fab_add"
+        android:layout_alignEnd="@id/fab_add"
+        app:shapeAppearanceOverlay="@style/RoundedShapeAppearance" />
+
+
 
 </RelativeLayout>

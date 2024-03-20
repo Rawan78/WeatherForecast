@@ -52,18 +52,18 @@ class FiveDaysForecastAdapter : RecyclerView.Adapter<FiveDaysForecastAdapter.Vie
         Log.i(TAG, "onBindViewHolder:$formattedTempMin°/$formattedTempMax° ")
 
         // Set weather icon
-//        val weatherIconId = forecastObject.weather.firstOrNull()?.icon
-//        val iconResourceId = getWeatherIconResourceId(weatherIconId)
-//        if (iconResourceId != null) {
-//            holder.binding.imageViewWeatherIcon.setImageResource(iconResourceId)
-//        }
-
-        val weatherIcon = forecastObject.weather?.getOrNull(0)?.icon
-        weatherIcon?.let {
-            Glide.with(holder.itemView.context)
-                .load("https://openweathermap.org/img/wn/$it@2x.png")
-                .into(holder.binding.imageViewWeatherIcon)
+        val weatherIconId = forecastObject.weather.firstOrNull()?.icon
+        val iconResourceId = getWeatherIconResourceId(weatherIconId)
+        if (iconResourceId != null) {
+            holder.binding.imageViewWeatherIcon.setImageResource(iconResourceId)
         }
+
+//        val weatherIcon = forecastObject.weather?.getOrNull(0)?.icon
+//        weatherIcon?.let {
+//            Glide.with(holder.itemView.context)
+//                .load("https://openweathermap.org/img/wn/$it@2x.png")
+//                .into(holder.binding.imageViewWeatherIcon)
+//        }
 
     }
 

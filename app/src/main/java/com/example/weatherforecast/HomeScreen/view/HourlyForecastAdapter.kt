@@ -45,18 +45,18 @@ class HourlyForecastAdapter : RecyclerView.Adapter<HourlyForecastAdapter.ViewHol
 
 
         // Set weather icon based on weather condition
-//        val weatherIcon = todayForecast.weather.firstOrNull()?.icon
-//        val iconResourceId = getWeatherIconResourceId(weatherIcon)
-//        if (iconResourceId != null) {
-//            holder.binding.imageViewCondition.setImageResource(iconResourceId)
-//        }
-
-        val weatherIcon = todayForecast.weather?.getOrNull(0)?.icon
-        weatherIcon?.let {
-            Glide.with(holder.itemView.context)
-                .load("https://openweathermap.org/img/wn/$it@2x.png")
-                .into(holder.binding.imageViewCondition)
+        val weatherIcon = todayForecast.weather.firstOrNull()?.icon
+        val iconResourceId = getWeatherIconResourceId(weatherIcon)
+        if (iconResourceId != null) {
+            holder.binding.imageViewCondition.setImageResource(iconResourceId)
         }
+
+//        val weatherIcon = todayForecast.weather?.getOrNull(0)?.icon
+//        weatherIcon?.let {
+//            Glide.with(holder.itemView.context)
+//                .load("https://openweathermap.org/img/wn/$it@2x.png")
+//                .into(holder.binding.imageViewCondition)
+//        }
     }
 
     fun setList(listOfTaday: List<WeatherList>) {
