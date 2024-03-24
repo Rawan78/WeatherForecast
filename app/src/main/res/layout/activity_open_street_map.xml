@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/view_icon"
+        android:src="@drawable/location"
         android:contentDescription="view_icon"
         app:backgroundTint="@color/navyBlue"
         android:layout_above="@id/fab_add"

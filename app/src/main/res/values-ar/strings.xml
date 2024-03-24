@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="now">الآن</string>
+    <string name="hourly_forecast">التنبؤ الساعي</string>
+    <string name="_7_day_forecast">التنبؤ لمدة 7 أيام</string>
+    <string name="current_conditions">الظروف الحالية</string>
+    <string name="wind">الرياح</string>
+    <string name="humidity">الرطوبة</string>
+    <string name="pressure">الضغط</string>
+    <string name="clouds">السحب</string>
+    <string name="sunrise">شروق الشمس</string>
+    <string name="sunset">غروب الشمس</string>
+    <string name="start_date">تاريخ البدء</string>
+    <string name="end_date">تاريخ الانتهاء</string>
+    <string name="pick_time">اختر الوقت</string>
+    <string name="choose_location">اختر الموقع</string>
+    <string name="location_mode">وضع الموقع</string>
+    <string name="language">اللغة</string>
+    <string name="temperature">درجة الحرارة</string>
+    <string name="wind_speed">سرعة الرياح</string>
+    <string name="gps">نظام تحديد المواقع العالمي</string>
+    <string name="map">الخريطة</string>
+    <string name="arabic">العربية</string>
+    <string name="english">الإنجليزية</string>
+    <string name="celsius">درجة مئوية</string>
+    <string name="kelvin">كلفن</string>
+    <string name="fahrenheit">فهرنهايت</string>
+    <string name="meter_sec">متر/ثانية</string>
+    <string name="miles_hour">ميل/ساعة</string>
+    <string name="alarms_on">تنبيهات مفعلة</string>
+    <string name="alarm_sound">صوت التنبيه</string>
+    <string name="notification">إشعار</string>
+    <string name="no_sound">بدون صوت</string>
+</resources>

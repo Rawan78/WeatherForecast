@@ -35,7 +35,7 @@
             android:layout_marginTop="52dp"
             android:layout_marginEnd="348dp"
             android:layout_marginBottom="1dp"
-            android:text="Now"
+            android:text="@string/now"
             android:textColor="@color/navyBlue"
             android:textSize="20dp"
             android:textStyle="bold"
@@ -132,7 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="Hourly forecast"
+            android:text="@string/hourly_forecast"
             android:textColor="@color/navyBlue"
             android:textSize="25dp"
             android:textStyle="bold"
@@ -148,7 +148,7 @@
             android:layout_marginStart="23dp"
             android:layout_marginEnd="224dp"
             android:layout_marginBottom="8dp"
-            android:text="5-day forecast"
+            android:text="@string/_7_day_forecast"
             android:textColor="@color/navyBlue"
             android:textSize="25dp"
             android:textStyle="bold"
@@ -176,7 +176,7 @@
             android:layout_marginStart="23dp"
             android:layout_marginEnd="179dp"
             android:layout_marginBottom="8dp"
-            android:text="Current conditions"
+            android:text="@string/current_conditions"
             android:textColor="@color/navyBlue"
             android:textSize="25dp"
             android:textStyle="bold"
@@ -214,7 +214,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="70dp"
-                    android:text="Wind"
+                    android:text="@string/wind"
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -226,7 +226,7 @@
                     android:layout_gravity="bottom"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="15dp"
-                    android:text="TextView"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -250,7 +250,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="70dp"
-                    android:text="Humidity"
+                    android:text="@string/humidity"
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -262,7 +262,7 @@
                     android:layout_gravity="bottom"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="15dp"
-                    android:text="TextView"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -300,7 +300,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="70dp"
-                    android:text="Pressure"
+                    android:text="@string/pressure"
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -312,7 +312,7 @@
                     android:layout_gravity="bottom"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="15dp"
-                    android:text="TextView"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -336,7 +336,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="70dp"
-                    android:text="Clouds"
+                    android:text="@string/clouds"
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -348,7 +348,7 @@
                     android:layout_gravity="bottom"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="15dp"
-                    android:text="TextView"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -386,7 +386,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="70dp"
-                    android:text="Sunrise"
+                    android:text="@string/sunrise"
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -398,7 +398,7 @@
                     android:layout_gravity="bottom"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="15dp"
-                    android:text="TextView"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -422,7 +422,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="70dp"
-                    android:text="Sunset"
+                    android:text="@string/sunset"
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
@@ -434,7 +434,7 @@
                     android:layout_gravity="bottom"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="15dp"
-                    android:text="TextView"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />

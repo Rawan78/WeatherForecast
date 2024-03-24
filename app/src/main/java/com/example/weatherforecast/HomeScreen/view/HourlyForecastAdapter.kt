@@ -8,10 +8,14 @@ import android.view.ViewGroup
 import com.example.weatherforecast.databinding.ItemHourlyForecastBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.weatherforecast.SharedPrefs
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import kotlin.math.roundToInt
 
 class HourlyForecastAdapter : RecyclerView.Adapter<HourlyForecastAdapter.ViewHolder>(){
+
+    lateinit var sharedPrefs : SharedPrefs
 
     private val TAG = "HourlyForecastAdapter"
 
@@ -21,6 +25,7 @@ class HourlyForecastAdapter : RecyclerView.Adapter<HourlyForecastAdapter.ViewHol
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater: LayoutInflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = ItemHourlyForecastBinding.inflate(inflater, parent, false)
+        sharedPrefs = SharedPrefs.getInstance(parent.context)
         return ViewHolder(binding)
     }
 
@@ -35,13 +40,15 @@ class HourlyForecastAdapter : RecyclerView.Adapter<HourlyForecastAdapter.ViewHol
         val time = todayForecast.dt_txt?.substring(11, 16)
         holder.binding.textViewTime.text = time
 
-        // Display temperature
-        val temperatureCelsius = todayForecast.main?.temp?.minus(273.15)?.toInt()
-        val temperatureFormatted = temperatureCelsius?.toString()
-        holder.binding.textViewTemperature.text = "$temperatureFormatted °C"
+        // Display temp_min and temp_max in Celsius
+        val temperature = todayForecast.main?.temp ?: 0.0
+
+        val temperatureSymbol = getTemperatureSymbol()
+
+        holder.binding.textViewTemperature.text = "${temperature.roundToInt()} $temperatureSymbol"
 
 
-        Log.i(TAG, "onBindViewHolder: time , formatted Time $time , timeOfApi $temperatureFormatted °C")
+        Log.i(TAG, "onBindViewHolder: time , formatted Time $time , timeOfApi $temperature °C")
 
 
         // Set weather icon based on weather condition
@@ -78,4 +85,21 @@ class HourlyForecastAdapter : RecyclerView.Adapter<HourlyForecastAdapter.ViewHol
 
     inner class ViewHolder(var binding: ItemHourlyForecastBinding): RecyclerView.ViewHolder(binding.root)
 
+    //For Temp
+    private fun getTemperatureUnits(): String {
+        val tempUnitPreference = sharedPrefs.getTemp() ?: ""
+        return when (tempUnitPreference) {
+            "Fahrenheit" -> "imperial"
+            "Celsius" -> "metric"
+            else -> ""
+        }
+    }
+
+    private fun getTemperatureSymbol(): String {
+        return when (sharedPrefs.getTemp()) {
+            "Fahrenheit" -> "F"
+            "Celsius" -> "C"
+            else -> "K"
+        }
+    }
 }

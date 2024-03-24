@@ -2,4 +2,35 @@
     <string name="app_name">Weather Forecast</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="now">Now</string>
+    <string name="hourly_forecast">Hourly forecast</string>
+    <string name="_7_day_forecast">7-day forecast</string>
+    <string name="current_conditions">Current conditions</string>
+    <string name="wind">Wind</string>
+    <string name="humidity">Humidity</string>
+    <string name="pressure">Pressure</string>
+    <string name="clouds">Clouds</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="pick_time">Pick Time</string>
+    <string name="choose_location">Choose Location</string>
+    <string name="location_mode">LOCATION MODE</string>
+    <string name="language">LANGUAGE</string>
+    <string name="temperature">TEMPERATURE</string>
+    <string name="wind_speed">WIND SPEED</string>
+    <string name="gps">GPS</string>
+    <string name="map">Map</string>
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
+    <string name="celsius">Celsius</string>
+    <string name="kelvin">Kelvin</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="meter_sec">Meter/Sec</string>
+    <string name="miles_hour">Miles/Hour</string>
+    <string name="alarms_on">Alarms on</string>
+    <string name="alarm_sound">Alarm sound</string>
+    <string name="notification">Notification</string>
+    <string name="no_sound">No sound</string>
 </resources>

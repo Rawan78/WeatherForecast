@@ -4,15 +4,20 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.weatherforecast.SharedPrefs
 import com.example.weatherforecast.WeatherList
 import com.example.weatherforecast.databinding.ItemDayForecastInHomeBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.roundToInt
 
 class FiveDaysForecastAdapter : RecyclerView.Adapter<FiveDaysForecastAdapter.ViewHolder>(){
+
+    lateinit var sharedPrefs : SharedPrefs
 
     private val TAG = "FiveDaysForecastAdapter"
 
@@ -22,6 +27,7 @@ class FiveDaysForecastAdapter : RecyclerView.Adapter<FiveDaysForecastAdapter.Vie
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater: LayoutInflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = ItemDayForecastInHomeBinding.inflate(inflater, parent, false)
+        sharedPrefs = SharedPrefs.getInstance(parent.context)
         return ViewHolder(binding)
     }
 
@@ -42,14 +48,14 @@ class FiveDaysForecastAdapter : RecyclerView.Adapter<FiveDaysForecastAdapter.Vie
         holder.binding.textViewDate.text = formattedDay
 
         // Display temp_min and temp_max in Celsius
-        val tempMinCelsius = forecastObject.main?.temp_min?.minus(273.15)?.toInt()
-        val formattedTempMin = tempMinCelsius?.toString()
+        val temperatureMin = forecastObject.main?.temp_min ?: 0.0
 
-        val tempMaxCelsius = forecastObject.main?.temp_max?.minus(273.15)?.toInt()
-        val formattedTempMax = tempMaxCelsius?.toString()
-        holder.binding.textViewTemperature.text = "${formattedTempMin}°/${formattedTempMax}°"
+        val temperatureMax = forecastObject.main?.temp_max ?: 0.0
+        val temperatureSymbol = getTemperatureSymbol()
 
-        Log.i(TAG, "onBindViewHolder:$formattedTempMin°/$formattedTempMax° ")
+        holder.binding.textViewTemperature.text = "${temperatureMin.roundToInt()}/${temperatureMax.roundToInt()} $temperatureSymbol"
+
+        Log.i(TAG, "onBindViewHolder:$temperatureMin°/$temperatureMax° ")
 
         // Set weather icon
         val weatherIconId = forecastObject.weather.firstOrNull()?.icon
@@ -85,4 +91,21 @@ class FiveDaysForecastAdapter : RecyclerView.Adapter<FiveDaysForecastAdapter.Vie
     }
     inner class ViewHolder(var binding: ItemDayForecastInHomeBinding): RecyclerView.ViewHolder(binding.root)
 
+    //For Temp
+    private fun getTemperatureUnits(): String {
+        val tempUnitPreference = sharedPrefs.getTemp() ?: ""
+        return when (tempUnitPreference) {
+            "Fahrenheit" -> "imperial"
+            "Celsius" -> "metric"
+            else -> ""
+        }
+    }
+
+    private fun getTemperatureSymbol(): String {
+        return when (sharedPrefs.getTemp()) {
+            "Fahrenheit" -> "F"
+            "Celsius" -> "C"
+            else -> "K"
+        }
+    }
 }

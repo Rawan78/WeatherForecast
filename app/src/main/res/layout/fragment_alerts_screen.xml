@@ -32,7 +32,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:text="Alarms on"
+                android:text="@string/alarms_on"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -93,7 +93,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="70dp"
-                android:text=" Alarm sound"
+                android:text="@string/alarm_sound"
 
                 android:textColor="@color/white"
                 android:textSize="20dp"
@@ -113,7 +113,7 @@
                     android:id="@+id/radio_GPS"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Notification"
+                    android:text="@string/notification"
                     android:textColor="@color/white"
                     />
 
@@ -121,7 +121,7 @@
                     android:id="@+id/radio_map"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No sound"
+                    android:text="@string/no_sound"
                     android:textColor="@color/white"
 
                      />
