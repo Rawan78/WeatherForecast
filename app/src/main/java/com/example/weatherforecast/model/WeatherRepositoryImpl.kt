@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.weatherforecast.WeatherList
 import com.example.weatherforecast.network.*
 import com.example.weatherforecast.db.*
+import com.example.weatherforecast.modelForAlerts.WeatherAlertResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -27,12 +28,23 @@ class WeatherRepositoryImpl private constructor(
     }
 
 
-    override suspend fun getCurrentWeather(lat: Double, lon: Double): Flow<WeatherResponse> {
-        val response = remoteSource.getCurrentWeatherOverNetwork(lat, lon)
+    override suspend fun getCurrentWeather(lat: Double, lon: Double , units: String , lang:String): Flow<WeatherResponse> {
+        val response = remoteSource.getCurrentWeatherOverNetwork(lat, lon  , units , lang)
         return flow {
             emit(response)
         }
         Log.i(TAG, "getCurrentWeather: ")
+    }
+
+    override suspend fun getWeatherAlerts(
+        lat: Double,
+        lon: Double
+    ): Flow<WeatherAlertResponse> {
+        val response = remoteSource.getCurrentWeatherAlertsOverNetwork(lat, lon )
+        return flow {
+            emit(response)
+        }
+        Log.i(TAG, "getWeatherAlerts: lat : $lat , lon : $lon ")
     }
 
     override suspend fun getFavCitiesFromRoom(): Flow<List<FavoriteCity>> {

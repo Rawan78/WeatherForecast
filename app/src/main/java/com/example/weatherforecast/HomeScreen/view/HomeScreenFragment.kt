@@ -2,6 +2,7 @@ package com.example.weatherforecast.HomeScreen.view
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 
 import android.os.Bundle
 import android.os.Looper
@@ -20,6 +21,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.weatherforecast.AlertScreen.viewModel.AlertScreenViewModel
+import com.example.weatherforecast.AlertScreen.viewModel.AlertScreenViewModelFactory
 import com.example.weatherforecast.R
 import com.example.weatherforecast.network.*
 import com.example.weatherforecast.model.*
@@ -41,9 +44,15 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.example.weatherforecast.databinding.FragmentHomeScreenBinding
 
+import com.example.weatherforecast.modelForAlerts.*
+import com.example.weatherforecast.SharedPrefs
+import kotlin.math.roundToInt
 
 
 class HomeScreenFragment : Fragment() {
+
+    lateinit var sharedPrefs : SharedPrefs
+
 
     private val TAG = "HomeScreenFragment"
 
@@ -53,11 +62,18 @@ class HomeScreenFragment : Fragment() {
 
     private lateinit var homeScreenViewModelFactory: HomeScreenViewModelFactory
     private lateinit var homeScreenViewModel: HomeScreenViewModel
+
     private lateinit var hourlyForecastAdapter: HourlyForecastAdapter
     private lateinit var recyclerViewHourlyForecast : RecyclerView
 
     private lateinit var fiveDayForecastAdapter: FiveDaysForecastAdapter
     private lateinit var recyclerViewFiveDayForecast : RecyclerView
+
+
+//    private lateinit var alertScreenViewModel: AlertScreenViewModel
+//    private lateinit var alertScreenViewModelFactory: AlertScreenViewModelFactory
+
+
 
     private lateinit var binding: FragmentHomeScreenBinding
 
@@ -113,12 +129,31 @@ class HomeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sharedPrefs = SharedPrefs.getInstance(requireContext())
+
+        setLocale(sharedPrefs.getLanguage() ?: "en")
+
+        val locationMode = sharedPrefs.getLocationMode()
+
+
+        //val windSpeedPreference = sharedPrefs.getWindSpeedPreference()
+
         fusedClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         homeScreenViewModelFactory = HomeScreenViewModelFactory(WeatherRepositoryImpl.getInstance
             (WeatherRemoteDataSourceImpl.getInstance() ,  WeatherLocalDataSourceImpl(requireContext())))
 
         homeScreenViewModel = ViewModelProvider(this, homeScreenViewModelFactory).get(HomeScreenViewModel::class.java)
+
+
+//        alertScreenViewModelFactory = AlertScreenViewModelFactory(
+//            WeatherRepositoryImpl.getInstance
+//                (WeatherRemoteDataSourceImpl.getInstance() ,  WeatherLocalDataSourceImpl(requireContext())))
+//
+//        alertScreenViewModel = ViewModelProvider(this, alertScreenViewModelFactory).get(
+//            AlertScreenViewModel::class.java)
+
 
         lifecycleScope.launch{
             homeScreenViewModel.currentWeather.collectLatest{result ->
@@ -143,6 +178,31 @@ class HomeScreenFragment : Fragment() {
             }
         }
 
+//        lifecycleScope.launch{
+//            alertScreenViewModel.currentWeatherAlert.collectLatest{result ->
+//                when (result){
+//                    is WeatherAlertState.Loading -> {
+//
+//                        Log.i(TAG, "onCreate: loading")
+//                    }
+//                    is WeatherAlertState.Success -> {
+//                        //updateUI(result.weatherResponse)
+//
+//                        testAlert(result.weatherAlertResponse)
+//
+//                        Log.i(TAG, "onViewCreated: alerts : ${result.weatherAlertResponse.alerts}   , daily list :  ${result.weatherAlertResponse.dailyList}")
+//                        Log.i(TAG, "onViewCreated: hourlyList : ${result.weatherAlertResponse.hourlylist}")
+//                        Log.i(TAG, "onViewCreated: current : ${result.weatherAlertResponse.current}")
+//                        Log.i(TAG, "onViewCreated: Minutely : ${result.weatherAlertResponse.minutelyList}")
+//
+//                    }
+//                    else -> {
+//                        Toast.makeText(requireContext(), "Failed to fetch cities", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+//        }
+
         hourlyForecastAdapter = HourlyForecastAdapter()
 
         recyclerViewHourlyForecast.apply {
@@ -157,17 +217,40 @@ class HomeScreenFragment : Fragment() {
             adapter = fiveDayForecastAdapter
         }
 
-        requestLocationUpdates()
+        if (locationMode == "GPS") {
+            requestLocationUpdates()
+        } else if (locationMode == "Map") {
+            // Retrieve selected location from SharedPreferences and show weather
+            val latitude = sharedPrefs.getLatitude()
+            val longitude = sharedPrefs.getLongitude()
+            val temperatureUnits = getTemperatureUnits()
+            Log.i(TAG, "onViewCreated: sharedPrefs.getLatitude() : $latitude , sharedPrefs.getLongitude() : $longitude")
+            val selectedLanguage = sharedPrefs.getLanguage() ?: "en"
+            homeScreenViewModel.getCurrentWeather(latitude, longitude, units = temperatureUnits, lang = selectedLanguage)
+            setLocale(selectedLanguage)
+        } else {
+            requestLocationUpdates()
 
+            Toast.makeText(requireContext(), "Please select a location mode", Toast.LENGTH_SHORT).show()
+        }
+
+       // requestLocationUpdates()
+        //alertScreenViewModel.getCurrentWeatherAlert(46.8182, 8.2275)
+
+
+    }
+
+
+    fun testAlert(weatherAlertResponse: WeatherAlertResponse){
+       // Log.i(TAG, "testAlert: ${weatherAlertResponse.alerts[0].event} , ${weatherAlertResponse.alerts[0].description}")
     }
 
     private fun updateUI(weatherResponse: WeatherResponse) {
 
-        val temperatureFahrenheit = weatherResponse.list[0].main?.temp
-        val temperatureCelsius = temperatureFahrenheit?.minus(273.15)?.toInt()
-        val temperatureFormatted = temperatureCelsius?.toString()
+        val temperature = weatherResponse.list[0].main?.temp ?: 0.0
+        val temperatureSymbol = getTemperatureSymbol()
 
-        currentTemperature.text = "${temperatureFormatted}°C"
+        currentTemperature.text = "${temperature.roundToInt()}°$temperatureSymbol"
 
         val inputDate = SimpleDateFormat("yyyy-MM-dd HH:mm" , Locale.getDefault())
         val currDate = inputDate.parse(weatherResponse.list[0].dt_txt)
@@ -186,11 +269,29 @@ class HomeScreenFragment : Fragment() {
         currentCity.text = weatherResponse.city.name
 
         // Set Current wind speed and humidity
-        val windSpeed = weatherResponse.list[0].wind?.speed ?: 0.0
+        //val windSpeed = weatherResponse.list[0].wind?.speed ?: 0.0
         val humidity = weatherResponse.list[0].main?.humidity ?: 0
 
-        currentWindSpeed.text = "${windSpeed} m/s"
+        //currentWindSpeed.text = "${windSpeed} m/s"
+
         currentHumidity.text = "${humidity}%"
+
+        // Convert wind speed from m/s to the preferred unit (e.g., Miles/Hour or Meter/Sec) based on user preference
+        val windSpeedMetersPerSec = weatherResponse.list[0].wind?.speed ?: 0.0
+        val windSpeedPreference = sharedPrefs.getWindSpeedPreference()
+
+        Log.i(TAG, "updateUI: getWindSpeedPreference : ${sharedPrefs.getWindSpeedPreference()}")
+
+        val convertedWindSpeed = when (windSpeedPreference) {
+            "Miles/Hour" -> convertMetersPerSecToMilesPerHour(windSpeedMetersPerSec)
+            "Meter/Sec" -> windSpeedMetersPerSec
+            else -> windSpeedMetersPerSec
+        }
+
+        // Update the wind speed TextView with the converted wind speed
+        currentWindSpeed.text = "$convertedWindSpeed $windSpeedPreference"
+
+       // homeScreenViewModel.getCurrentWeather(latitude, longitude)
 
         // Set Current pressure and clouds
 
@@ -228,6 +329,41 @@ class HomeScreenFragment : Fragment() {
 
         hourlyForecastAdapter.setList(weatherResponse.list)
         fiveDayForecastAdapter.setList(weatherResponse.list)
+
+
+    }
+
+    //For Wind Speed
+    private fun convertMetersPerSecToMilesPerHour(metersPerSec: Double): String {
+        val result = metersPerSec * 2.23694
+        return String.format("%.2f", result)
+    }
+
+    //For Language
+    private fun setLocale(language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.locale = locale
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
+    //For Temp
+    private fun getTemperatureUnits(): String {
+        val tempUnitPreference = sharedPrefs.getTemp() ?: ""
+        return when (tempUnitPreference) {
+            "Fahrenheit" -> "imperial"
+            "Celsius" -> "metric"
+            else -> ""
+        }
+    }
+
+    private fun getTemperatureSymbol(): String {
+        return when (sharedPrefs.getTemp()) {
+            "Fahrenheit" -> "F"
+            "Celsius" -> "C"
+            else -> "K"
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -254,8 +390,15 @@ class HomeScreenFragment : Fragment() {
                     // stop receiving location updates after receiving the first location
                      fusedClient?.removeLocationUpdates(this)
 
+                    var selectedLanguage = sharedPrefs.getLanguage() ?: "en"
+
+                    // Retrieve temperature units preference
+                    val temperatureUnits = getTemperatureUnits()
+
                     // Retrieve weather data with latitude and longitude
-                    homeScreenViewModel.getCurrentWeather(latitude, longitude)
+                    homeScreenViewModel.getCurrentWeather(latitude, longitude , units = temperatureUnits ,lang = selectedLanguage)
+                    setLocale(selectedLanguage)
+                    //alertScreenViewModel.getCurrentWeatherAlert(latitude, longitude)
                 }
             }
         }

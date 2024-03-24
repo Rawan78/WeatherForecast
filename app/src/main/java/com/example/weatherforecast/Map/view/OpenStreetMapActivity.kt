@@ -38,6 +38,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.util.Locale
 import com.example.weatherforecast.MainActivity
+import com.example.weatherforecast.SharedPrefs
 
 
 class OpenStreetMapActivity() : AppCompatActivity() , MapListener {
@@ -53,7 +54,8 @@ class OpenStreetMapActivity() : AppCompatActivity() , MapListener {
     private lateinit var favoriteCityViewModelFactory: FavoriteCityViewModelFactory
     private lateinit var favoriteCityViewModel: FavoriteCityViewModel
 
-
+    private var selectedLatitude: Double = 0.0
+    private var selectedLongitude: Double = 0.0
 
     private lateinit var pinMarker: Marker
 
@@ -104,13 +106,9 @@ class OpenStreetMapActivity() : AppCompatActivity() , MapListener {
     }
 
     override fun onScroll(event: ScrollEvent?): Boolean {
-//        Log.i("TAG", "onCreate:la ${event?.source?.getMapCenter()?.latitude}")
-//        Log.i("TAG", "onCreate:lo ${event?.source?.getMapCenter()?.longitude}")
         return true
     }
-
     override fun onZoom(event: ZoomEvent?): Boolean {
-        //Log.i("TAG", "onZoom zoom level: ${event?.zoomLevel}   source:  ${event?.source}")
         return false;    }
 
     private inner class TapOverlay : Overlay(){
@@ -123,6 +121,9 @@ class OpenStreetMapActivity() : AppCompatActivity() , MapListener {
             pinMarker?.position = point as GeoPoint
             binding.osmmap.overlays.add(pinMarker)
             binding.osmmap.invalidate()
+
+            selectedLatitude = point.latitude
+            selectedLongitude = point.longitude
 
             val cityName = getCityName(point.latitude, point.longitude)
 
@@ -140,6 +141,14 @@ class OpenStreetMapActivity() : AppCompatActivity() , MapListener {
                     Toast.makeText(this@OpenStreetMapActivity, "Failed to get city name", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            binding.fabView.setOnClickListener {
+                storeSelectedLocation()
+                val intent = Intent(this@OpenStreetMapActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
             return true
         }
     }
@@ -155,6 +164,18 @@ class OpenStreetMapActivity() : AppCompatActivity() , MapListener {
             return city
         }
         return null
+    }
+
+    //For Shared Prefs
+    private fun storeSelectedLocation() {
+        val sharedPrefs = SharedPrefs.getInstance(applicationContext)
+        sharedPrefs.setLatitude(selectedLatitude)
+        sharedPrefs.setLongitude(selectedLongitude)
+    }
+
+    override fun onDestroy() {
+        storeSelectedLocation()
+        super.onDestroy()
     }
 
 }

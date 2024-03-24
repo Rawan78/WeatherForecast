@@ -1,11 +1,14 @@
 package com.example.weatherforecast.model
 
 import kotlinx.coroutines.flow.Flow
+import com.example.weatherforecast.modelForAlerts.*
 
 interface WeatherRepository {
 
     //From Retrofit
-    suspend fun getCurrentWeather(lat:Double , lon:Double): Flow<WeatherResponse>
+    suspend fun getCurrentWeather(lat:Double , lon:Double , units: String , lang:String): Flow<WeatherResponse>
+
+    suspend fun getWeatherAlerts(lat:Double , lon:Double ) : Flow<WeatherAlertResponse>
 
 
     //From ROOM

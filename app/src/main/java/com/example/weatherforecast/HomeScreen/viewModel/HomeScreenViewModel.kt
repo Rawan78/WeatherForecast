@@ -21,9 +21,9 @@ class HomeScreenViewModel(private val weatherRepository: WeatherRepository) : Vi
     val currentWeather : StateFlow<WeatherState> = _currentWeather
 
     //Over Network
-    fun getCurrentWeather(latitude: Double, longitude: Double) {
+    fun getCurrentWeather(latitude: Double, longitude: Double  , units: String , lang:String) {
         viewModelScope.launch {
-            weatherRepository.getCurrentWeather(latitude, longitude)
+            weatherRepository.getCurrentWeather(latitude, longitude, units ,lang)
                 .catch {
                     _currentWeather.value = WeatherState.Failure(it)
                 }

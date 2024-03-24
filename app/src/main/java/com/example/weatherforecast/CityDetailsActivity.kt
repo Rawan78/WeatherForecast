@@ -26,9 +26,12 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlin.math.roundToInt
 
 
 class CityDetailsActivity : AppCompatActivity() {
+
+    lateinit var sharedPrefs : SharedPrefs
 
     private val TAG = "HomeScreenActivity"
 
@@ -75,6 +78,9 @@ class CityDetailsActivity : AppCompatActivity() {
         recyclerViewFiveDayForecast = findViewById(R.id.rv_5_day_forecast)
         progressBarHome = findViewById(R.id.progressBarHome)
 
+        sharedPrefs = SharedPrefs.getInstance(this)
+        val selectedLanguage = sharedPrefs.getLanguage() ?: "en"
+
         fusedClient = LocationServices.getFusedLocationProviderClient(this)
 
         homeScreenViewModelFactory = HomeScreenViewModelFactory(
@@ -120,18 +126,20 @@ class CityDetailsActivity : AppCompatActivity() {
 
         val favoriteCity = intent.getSerializableExtra("favoriteCity") as FavoriteCity
 
-        homeScreenViewModel.getCurrentWeather(favoriteCity.lat, favoriteCity.lon)
+        // Retrieve temperature units preference
+        val temperatureUnits = getTemperatureUnits()
+
+        homeScreenViewModel.getCurrentWeather(favoriteCity.lat, favoriteCity.lon, units = temperatureUnits ,lang = selectedLanguage )
         Log.i(TAG, "onCreate:  favoriteCity.lat : ${favoriteCity.lat}  , favoriteCity.lon : ${favoriteCity.lon}")
 
     }
 
     private fun updateUI(weatherResponse: WeatherResponse) {
 
-        val temperatureFahrenheit = weatherResponse.list[0].main?.temp
-        val temperatureCelsius = temperatureFahrenheit?.minus(273.15)?.toInt()
-        val temperatureFormatted = temperatureCelsius?.toString()
+        val temperature = weatherResponse.list[0].main?.temp ?: 0.0
+        val temperatureSymbol = getTemperatureSymbol()
 
-        currentTemperature.text = "${temperatureFormatted}°C"
+        currentTemperature.text = "${temperature.roundToInt()}°$temperatureSymbol"
 
         val inputDate = SimpleDateFormat("yyyy-MM-dd HH:mm" , Locale.getDefault())
         val currDate = inputDate.parse(weatherResponse.list[0].dt_txt)
@@ -152,11 +160,28 @@ class CityDetailsActivity : AppCompatActivity() {
         currentCity.text = weatherResponse.city.name
 
         // Set Current wind speed and humidity
-        val windSpeed = weatherResponse.list[0].wind?.speed ?: 0.0
+        //val windSpeed = weatherResponse.list[0].wind?.speed ?: 0.0
         val humidity = weatherResponse.list[0].main?.humidity ?: 0
 
-        currentWindSpeed.text = "${windSpeed} m/s"
+        //currentWindSpeed.text = "${windSpeed} m/s"
         currentHumidity.text = "${humidity}%"
+
+
+        // Convert wind speed from m/s to the preferred unit (e.g., Miles/Hour or Meter/Sec) based on user preference
+        val windSpeedMetersPerSec = weatherResponse.list[0].wind?.speed ?: 0.0
+        val windSpeedPreference = sharedPrefs.getWindSpeedPreference()
+
+        Log.i(TAG, "updateUI: getWindSpeedPreference : ${sharedPrefs.getWindSpeedPreference()}")
+
+        val convertedWindSpeed = when (windSpeedPreference) {
+            "Miles/Hour" -> convertMetersPerSecToMilesPerHour(windSpeedMetersPerSec)
+            "Meter/Sec" -> windSpeedMetersPerSec
+            else -> windSpeedMetersPerSec
+        }
+
+        // Update the wind speed TextView with the converted wind speed
+        currentWindSpeed.text = "$convertedWindSpeed $windSpeedPreference"
+
 
         // Set Current pressure and clouds
 
@@ -194,5 +219,29 @@ class CityDetailsActivity : AppCompatActivity() {
 
         hourlyForecastAdapter.setList(weatherResponse.list)
         fiveDayForecastAdapter.setList(weatherResponse.list)
+    }
+
+    //For Wind Speed
+    private fun convertMetersPerSecToMilesPerHour(metersPerSec: Double): String {
+        val result = metersPerSec * 2.23694
+        return String.format("%.2f", result)
+    }
+
+    //For Temp
+    private fun getTemperatureUnits(): String {
+        val tempUnitPreference = sharedPrefs.getTemp() ?: ""
+        return when (tempUnitPreference) {
+            "Fahrenheit" -> "imperial"
+            "Celsius" -> "metric"
+            else -> ""
+        }
+    }
+
+    private fun getTemperatureSymbol(): String {
+        return when (sharedPrefs.getTemp()) {
+            "Fahrenheit" -> "F"
+            "Celsius" -> "C"
+            else -> "K"
+        }
     }
 }

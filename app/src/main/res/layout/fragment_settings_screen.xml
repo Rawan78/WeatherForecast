@@ -42,7 +42,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="70dp"
-                android:text="LOCATION MODE"
+                android:text="@string/location_mode"
 
                 android:textColor="@color/white"
                 android:textSize="20dp"
@@ -62,7 +62,7 @@
                     android:id="@+id/radio_GPS"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="GPS"
+                    android:text="@string/gps"
                     android:textStyle="italic"
                     android:textColor="@color/white" />
 
@@ -70,7 +70,7 @@
                     android:id="@+id/radio_map"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Map"
+                    android:text="@string/map"
                     android:textStyle="italic"
 
                     android:textColor="@color/white" />
@@ -96,7 +96,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="70dp"
-                android:text="LANGUAGE"
+                android:text="@string/language"
 
                 android:textColor="@color/white"
                 android:textSize="20dp"
@@ -116,7 +116,7 @@
                     android:id="@+id/radio_arabic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Arabic"
+                    android:text="@string/arabic"
                     android:textStyle="italic"
 
                     android:textColor="@color/white" />
@@ -125,7 +125,7 @@
                     android:id="@+id/radio_english"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="English"
+                    android:text="@string/english"
                     android:textStyle="italic"
                     android:textColor="@color/white" />
 
@@ -166,7 +166,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="70dp"
-                android:text="TEMPERATURE"
+                android:text="@string/temperature"
 
                 android:textColor="@color/white"
                 android:textSize="20dp"
@@ -186,7 +186,7 @@
                     android:id="@+id/radio_celsius"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Celsius"
+                    android:text="@string/celsius"
                     android:textStyle="italic"
 
                     android:textColor="@color/white" />
@@ -195,7 +195,7 @@
                     android:id="@+id/radio_kelvin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kelvin"
+                    android:text="@string/kelvin"
                     android:textStyle="italic"
                     android:textColor="@color/white" />
 
@@ -203,7 +203,7 @@
                     android:id="@+id/radio_fahrenheit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fahrenheit"
+                    android:text="@string/fahrenheit"
                     android:textStyle="italic"
                     android:textColor="@color/white" />
 
@@ -229,7 +229,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="70dp"
-                android:text="WIND SPEED"
+                android:text="@string/wind_speed"
 
                 android:textColor="@color/white"
                 android:textSize="20dp"
@@ -249,7 +249,7 @@
                     android:id="@+id/radio_mil_hour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Miles/Hour"
+                    android:text="@string/miles_hour"
                     android:textStyle="italic"
 
                     android:textColor="@color/white" />
@@ -258,7 +258,7 @@
                     android:id="@+id/radio_meter_sec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Meter/Sec"
+                    android:text="@string/meter_sec"
                     android:textStyle="italic"
                     android:textColor="@color/white" />
 
