@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.weatherforecast.WeatherList
 import com.example.weatherforecast.network.*
 import com.example.weatherforecast.db.*
+import com.example.weatherforecast.modelForAlerts.AlertDTO
 import com.example.weatherforecast.modelForAlerts.WeatherAlertResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -60,6 +61,18 @@ class WeatherRepositoryImpl private constructor(
     override suspend fun deleteFromFav(favoriteCity: FavoriteCity) {
         localSource.removeFromFav(favoriteCity)
         Log.i(TAG, "deleteFromFav: ")
+    }
+
+    override suspend fun getAllAlertsFromRoom(): Flow<List<AlertDTO>> {
+        return localSource.getAllAlerts()
+    }
+
+    override suspend fun insertToAlerts(alertDTO: AlertDTO) {
+        localSource.addToAlerts(alertDTO)
+    }
+
+    override suspend fun deleteFromAlerts(alertDTO: AlertDTO) {
+        localSource.removeFromAlerts(alertDTO)
     }
 
 

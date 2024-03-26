@@ -17,6 +17,10 @@ class SharedPrefs internal constructor(private val context: Context){
         private const val KEY_LATITUDE = "latitude"
         private const val KEY_LONGITUDE = "longitude"
 
+        private const val KEY_LATITUDE_FOR_ALERT = "latitude_for_alert"
+        private const val KEY_LONGITUDE_FOR_ALERT = "longitude_for_alert"
+        private const val KEY_CITY_NAME_FOR_ALERT = "city_name_for_alert"
+
 
         @SuppressLint("StaticFieldLeak")
         private var instance : SharedPrefs? = null
@@ -103,6 +107,33 @@ class SharedPrefs internal constructor(private val context: Context){
 
     fun getLongitude(): Double {
         return prefs.getFloat(KEY_LONGITUDE, 0.0f).toDouble()
+    }
+
+    // For latitude For Alert
+    fun setLatitudeForAlert(latitude: Double) {
+        prefs.edit().putFloat(KEY_LATITUDE_FOR_ALERT, latitude.toFloat()).apply()
+    }
+
+    fun getLatitudeForAlert(): Double {
+        return prefs.getFloat(KEY_LATITUDE_FOR_ALERT, 0.0f).toDouble()
+    }
+
+    // For longitude For Alert
+    fun setLongitudeForAlert(longitude: Double) {
+        prefs.edit().putFloat(KEY_LONGITUDE_FOR_ALERT, longitude.toFloat()).apply()
+    }
+
+    fun getLongitudeForAlert(): Double {
+        return prefs.getFloat(KEY_LONGITUDE_FOR_ALERT, 0.0f).toDouble()
+    }
+
+    // For city name for alert
+    fun setCityNameForAlert(city: String) {
+        prefs.edit().putString(KEY_CITY_NAME_FOR_ALERT, city).apply()
+    }
+
+    fun getCityNameForAlert(): String? {
+        return prefs.getString(KEY_CITY_NAME_FOR_ALERT, "")
     }
 
 

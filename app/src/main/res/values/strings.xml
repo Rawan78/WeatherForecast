@@ -33,4 +33,6 @@
     <string name="alarm_sound">Alarm sound</string>
     <string name="notification">Notification</string>
     <string name="no_sound">No sound</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>

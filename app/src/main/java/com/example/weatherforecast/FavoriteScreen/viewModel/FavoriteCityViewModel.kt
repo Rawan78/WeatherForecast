@@ -1,8 +1,6 @@
 package com.example.weatherforecast.FavoriteScreen.viewModel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecast.model.FavoriteCity
@@ -13,12 +11,11 @@ import kotlinx.coroutines.launch
 import com.example.weatherforecast.db.*
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 
 
 class FavoriteCityViewModel (private val weatherRepository: WeatherRepository) : ViewModel(){
-    private val _cities: MutableStateFlow<FavoriteCityState> = MutableStateFlow<FavoriteCityState>(FavoriteCityState.Loading)
-    val cities : StateFlow<FavoriteCityState> = _cities
+    private val _cities: MutableStateFlow<LocalState> = MutableStateFlow<LocalState>(LocalState.Loading)
+    val cities : StateFlow<LocalState> = _cities
 
     private val TAG = "FavoriteCityViewModel"
 
@@ -26,10 +23,10 @@ class FavoriteCityViewModel (private val weatherRepository: WeatherRepository) :
         viewModelScope.launch{
             weatherRepository.getFavCitiesFromRoom()
                 .catch {
-                    _cities.value = FavoriteCityState.Failure(it)
+                    _cities.value = LocalState.Failure(it)
                 }
                 .collect{
-                    data -> _cities.value = FavoriteCityState.Success(data)
+                    data -> _cities.value = LocalState.Success(data)
                 }
             Log.i(TAG, "getFavouriteCitiesFromRoom: ")
         }

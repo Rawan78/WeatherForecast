@@ -32,7 +32,8 @@ class FavoriteCityAdapter (context: Context , _favoriteCities: List<FavoriteCity
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
         val inflater: LayoutInflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = ItemFavoriteCityBinding.inflate(inflater, parent, false)
-        return CityViewHolder(binding)    }
+        return CityViewHolder(binding)
+    }
 
     override fun getItemCount(): Int {
         return favoriteCities.size
