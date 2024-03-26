@@ -12,7 +12,13 @@ interface WeatherRepository {
 
 
     //From ROOM
+    // For Favorite
     suspend fun getFavCitiesFromRoom(): Flow<List<FavoriteCity>>
     suspend fun insertToFav(favoriteCity: FavoriteCity)
     suspend fun deleteFromFav(favoriteCity: FavoriteCity)
+
+    // For Alerts
+    suspend fun getAllAlertsFromRoom(): Flow<List<AlertDTO>>
+    suspend fun insertToAlerts(alertDTO: AlertDTO)
+    suspend fun deleteFromAlerts(alertDTO: AlertDTO)
 }

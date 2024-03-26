@@ -12,6 +12,19 @@
         android:layout_height="wrap_content"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="0dp"
+        android:src="@drawable/alarm_clock"
+        android:contentDescription="add_alert_icon"
+        app:backgroundTint="@color/navyBlue"
+        android:layout_above="@id/fab_view"
+        android:layout_alignEnd="@id/fab_view"
+        app:shapeAppearanceOverlay="@style/RoundedShapeAppearance" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

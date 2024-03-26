@@ -143,4 +143,18 @@
         app:backgroundTint="@color/navyBlue"
         app:shapeAppearanceOverlay="@style/RoundedShapeAppearance" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_alerts"
+        android:layout_width="match_parent"
+        android:layout_height="474dp"
+        android:layout_gravity="bottom"
+        android:paddingTop="20dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
 </FrameLayout>

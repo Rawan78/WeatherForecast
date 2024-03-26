@@ -21,7 +21,7 @@ import com.example.weatherforecast.network.WeatherRemoteDataSourceImpl
 
 import com.example.weatherforecast.FavoriteScreen.viewModel.*
 import com.example.weatherforecast.databinding.FragmentFavoritesScreenBinding
-import com.example.weatherforecast.db.FavoriteCityState
+import com.example.weatherforecast.db.LocalState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.example.weatherforecast.CityDetailsActivity
@@ -66,13 +66,13 @@ class FavoritesScreenFragment : Fragment() , OnFavCityClickListener{
         lifecycleScope.launch{
             favoriteCityViewModel.cities.collectLatest{result ->
                 when (result){
-                    is FavoriteCityState.Loading -> {
+                    is LocalState.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
                         recyclerViewFavoriteCities.visibility = View.GONE
 
                         Log.i(TAG, "onCreate: loading")
                     }
-                    is FavoriteCityState.Success -> {
+                    is LocalState.Success -> {
                         binding.progressBar.visibility = View.GONE
                         recyclerViewFavoriteCities.visibility = View.VISIBLE
                         favoriteCityAdapter.setCities(result.favoriteCity)

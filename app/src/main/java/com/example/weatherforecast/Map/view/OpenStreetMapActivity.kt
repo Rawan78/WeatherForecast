@@ -149,6 +149,10 @@ class OpenStreetMapActivity() : AppCompatActivity() , MapListener {
                 finish()
             }
 
+            binding.fabAddAlert.setOnClickListener {
+                storeSelectedLocationForAlert()
+            }
+
             return true
         }
     }
@@ -166,11 +170,19 @@ class OpenStreetMapActivity() : AppCompatActivity() , MapListener {
         return null
     }
 
-    //For Shared Prefs
+    //For Shared Prefs For Location Mode
     private fun storeSelectedLocation() {
         val sharedPrefs = SharedPrefs.getInstance(applicationContext)
         sharedPrefs.setLatitude(selectedLatitude)
         sharedPrefs.setLongitude(selectedLongitude)
+    }
+
+    //For Shared Prefs For Alert
+    private fun storeSelectedLocationForAlert() {
+        val sharedPrefs = SharedPrefs.getInstance(applicationContext)
+        sharedPrefs.setLatitudeForAlert(selectedLatitude)
+        sharedPrefs.setLongitudeForAlert(selectedLongitude)
+        sharedPrefs.setCityNameForAlert(getCityName(selectedLatitude,selectedLongitude).toString())
     }
 
     override fun onDestroy() {
