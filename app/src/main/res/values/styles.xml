@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+
+    </style>
+
+    <style name="RoundedShapeAppearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">28dp</item> <!-- Adjust the value to control the radius -->
+    </style>
+
+</resources>
