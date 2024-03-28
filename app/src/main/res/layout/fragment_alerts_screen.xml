@@ -121,7 +121,7 @@
                     android:id="@+id/radio_map"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no_sound"
+                    android:text="@string/default_alarm_sound"
                     android:textColor="@color/white"
 
                      />
