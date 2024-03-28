@@ -21,20 +21,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources.getColorStateList
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecast.AlertScreen.viewModel.*
-import com.example.weatherforecast.FavoriteScreen.view.FavoriteCityAdapter
-import com.example.weatherforecast.FavoriteScreen.view.OnFavCityClickListener
 import com.example.weatherforecast.HomeScreen.viewModel.HomeScreenViewModel
 import com.example.weatherforecast.HomeScreen.viewModel.HomeScreenViewModelFactory
-import com.example.weatherforecast.Map.view.OpenStreetMapActivity
 import com.example.weatherforecast.R
 
 import com.example.weatherforecast.databinding.FragmentAlertsScreenBinding
-import com.example.weatherforecast.databinding.FragmentFavoritesScreenBinding
 import com.example.weatherforecast.db.WeatherLocalDataSourceImpl
 import com.example.weatherforecast.model.WeatherRepositoryImpl
 import com.example.weatherforecast.network.WeatherRemoteDataSourceImpl
@@ -127,6 +124,7 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
                        // updateUI(result.weatherResponse)
                         alertDescription = result.weatherResponse.list[0].weather.firstOrNull()?.description ?: ""
                         countryName = result.weatherResponse.city.country
+
                     }
                     else -> {
                         //Toast.makeText(requireContext(), "Failed to fetch cities", Toast.LENGTH_SHORT).show()
@@ -192,8 +190,8 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setSwitchButtonAlarm(){
-        binding.switchAlarm.thumbTintList = getColorStateList(requireContext(),R.color.white) // White thumb when checked
-        binding.switchAlarm.trackTintList = getColorStateList(requireContext(),R.color.black) // Black track when unchecked
+        binding.switchAlarm.thumbTintList = getColorStateList(requireContext(),R.color.white)
+        binding.switchAlarm.trackTintList = getColorStateList(requireContext(),R.color.black) 
 
         binding.switchAlarm.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
@@ -248,25 +246,36 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
 
         dialogView.findViewById<Button>(R.id.btnSave)?.setOnClickListener {
 
+            clearNotifications()
+
             // Retrieve the values from the views
             val start_date = dialogView.findViewById<TextView>(R.id.tv_start_date).text.toString()
             val end_date = dialogView.findViewById<TextView>(R.id.tv_end_date).text.toString()
             val timeForAlert = dialogView.findViewById<TextView>(R.id.tv_time_for_alert).text.toString()
+            val city_name = dialogView.findViewById<TextView>(R.id.tv_location_for_alert).text.toString()
 
-            val alert = AlertDTO(
-                id = 0,
-                cityName = sharedPrefs.getCityNameForAlert().toString(),
-                latitude = sharedPrefs.getLatitudeForAlert(),
-                longitude = sharedPrefs.getLongitudeForAlert(),
-                startDate =start_date ,
-                endDate = end_date,
-                time = timeForAlert
-            )
+            if (start_date.isNullOrEmpty() || end_date.isNullOrEmpty() || timeForAlert.isNullOrEmpty() || city_name.isNullOrEmpty()) {
+                // Show Toast to notify the user to fill all fields
+                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
+            } else {
 
-            scheduleAlarmForAlert(alert)
+                val alert = AlertDTO(
+                    id = 0,
+                    cityName = city_name,
+                    latitude = sharedPrefs.getLatitudeForAlert(),
+                    longitude = sharedPrefs.getLongitudeForAlert(),
+                    startDate = start_date,
+                    endDate = end_date,
+                    time = timeForAlert
+                )
 
-            alertScreenViewModel.insertToAlerts(alert)
-            alertDialog.dismiss()
+                scheduleMyAlarm(alert)
+
+                scheduleAlarmForAlert(alert)
+
+                alertScreenViewModel.insertToAlerts(alert)
+                alertDialog.dismiss()
+            }
         }
 
         dialogView.findViewById<Button>(R.id.btnCancel)?.setOnClickListener {
@@ -358,6 +367,7 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
 
         // Calculate the alarm time
         val alarmTime = calculateAlarmTime(alertDTO.startDate, alertDTO.time)
+        Log.i(TAG, "scheduleAlarmForAlert: alarmTime -> $alarmTime")
 
         // Use setExactAndAllowWhileIdle() for precise timing
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
@@ -368,7 +378,36 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         val dateTime = "$startDate $time"
         val date = dateFormat.parse(dateTime)
+
         return date?.time ?: 0L
+    }
+
+    private fun clearNotifications() {
+        val notificationManager = NotificationManagerCompat.from(requireContext())
+        notificationManager.cancelAll()
+    }
+
+    @SuppressLint("ScheduleExactAlarm")
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun scheduleMyAlarm(alertDTO: AlertDTO) {
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
+            putExtra("cityName", alertDTO.cityName)
+            //putExtra("country", countryName)
+            putExtra("alert_description" , alertDescription)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            alertDTO.id,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Calculate the alarm time
+        val alarmTime = calculateAlarmTime(alertDTO.startDate, alertDTO.time)
+
+        // Use setExactAndAllowWhileIdle() for precise timing
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
     }
 
 }

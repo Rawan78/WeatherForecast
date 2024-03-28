@@ -35,4 +35,8 @@
     <string name="no_sound">No sound</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="title_activity_alarm">AlarmActivity</string>
+    <string name="default_alarm_sound">Default alarm sound</string>
+    <string name="_6_day_forecast">6-day forecast</string>
 </resources>

@@ -32,4 +32,10 @@
     <string name="alarm_sound">صوت التنبيه</string>
     <string name="notification">إشعار</string>
     <string name="no_sound">بدون صوت</string>
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
+    <string name="dismiss">تجاهل</string>
+    <string name="title_activity_alarm">نشاط التنبيه</string>
+    <string name="default_alarm_sound">الصوت الافتراضي للتنبيه</string>
+    <string name="_6_day_forecast">التنبؤ لمدة 6 أيام</string>
 </resources>

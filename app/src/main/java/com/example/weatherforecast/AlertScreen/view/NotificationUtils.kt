@@ -21,7 +21,7 @@ const val NOTIFICATION_PERM = 1023
 @RequiresApi(Build.VERSION_CODES.S)
 fun createNotification(context: Context, cityName: String , alert: String): NotificationCompat.Builder {
 
-    
+
 
     // Create a notification channel if targeting Android Oreo (API level 26) or higher
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
