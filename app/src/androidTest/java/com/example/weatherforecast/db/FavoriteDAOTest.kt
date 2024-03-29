@@ -42,30 +42,42 @@ class FavoriteDAOTest {
 
     @Test
     fun testInsertAllFavorites_insert2Cities() = runBlocking {
+
+        //Given
         val favoriteCities = listOf(
             FavoriteCity("City1", 1.0, 1.0),
             FavoriteCity("City2", 2.0, 2.0)
         )
+
+        //When
         dao.insertAllFavorites(favoriteCities)
 
+        //Then
         val storedFavorites = dao.getStoredFavoriteCities().first()
         assertEquals(favoriteCities, storedFavorites)
     }
 
     @Test
     fun testGetStoredFavoriteCities_retrieveFavoriteCities() = runBlocking {
+
+        //Given
         val favoriteCities = listOf(
             FavoriteCity("City1", 1.0, 1.0),
             FavoriteCity("City2", 2.0, 2.0)
         )
+
+        //When
         dao.insertAllFavorites(favoriteCities)
 
+        //Then
         val storedFavorites = dao.getStoredFavoriteCities().first()
         assertEquals(favoriteCities, storedFavorites)
     }
 
     @Test
     fun testInsertFavorite_oneFavoriteCity() = runBlocking {
+
+
         val favoriteCity = FavoriteCity("City1", 1.0, 1.0)
         dao.insertFavorite(favoriteCity)
 
@@ -75,11 +87,15 @@ class FavoriteDAOTest {
 
     @Test
     fun testDeleteFavorite_oneFavoriteCity() = runBlocking {
+
+        //Given
         val favoriteCity = FavoriteCity("City1", 1.0, 1.0)
         dao.insertFavorite(favoriteCity)
 
+        //When
         dao.deleteFavorite(favoriteCity)
 
+        //Then
         val storedFavorites = dao.getStoredFavoriteCities().first()
         assertEquals(emptyList<FavoriteCity>(), storedFavorites)
     }

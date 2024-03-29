@@ -14,7 +14,6 @@ class WeatherRepositoryImpl private constructor(
     private val localSource: WeatherLocalDataSource
 )
     : WeatherRepository{
-    private val TAG = "WeatherRepositoryImpl"
 
     companion object {
         @Volatile
@@ -34,7 +33,6 @@ class WeatherRepositoryImpl private constructor(
         return flow {
             emit(response)
         }
-        Log.i(TAG, "getCurrentWeather: ")
     }
 
     override suspend fun getWeatherAlerts(
@@ -45,22 +43,18 @@ class WeatherRepositoryImpl private constructor(
         return flow {
             emit(response)
         }
-        Log.i(TAG, "getWeatherAlerts: lat : $lat , lon : $lon ")
     }
 
     override suspend fun getFavCitiesFromRoom(): Flow<List<FavoriteCity>> {
         return localSource.getFavCities()
-        Log.i(TAG, "getFavCitiesFromRoom: ")
     }
 
     override suspend fun insertToFav(favoriteCity: FavoriteCity) {
         localSource.addToFav(favoriteCity)
-        Log.i(TAG, "insertToFav: ")
     }
 
     override suspend fun deleteFromFav(favoriteCity: FavoriteCity) {
         localSource.removeFromFav(favoriteCity)
-        Log.i(TAG, "deleteFromFav: ")
     }
 
     override suspend fun getAllAlertsFromRoom(): Flow<List<AlertDTO>> {

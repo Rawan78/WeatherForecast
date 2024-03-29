@@ -2,22 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="WeatherLocalDataSourceImplTest">
+      <entry key="addToAlerts_oneAlert()">
+        <State />
+      </entry>
+      <entry key="addToFav_AndRetrieve()">
         <State />
       </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="testAddToAlerts()">
+      <entry key="getAllFav_TwoCities()">
         <State />
       </entry>
-      <entry key="testAddToFav()">
+      <entry key="removeFromAlerts_oneAlert()">
         <State />
       </entry>
-      <entry key="testGetFavCities()">
-        <State />
-      </entry>
-      <entry key="testRemoveFromAlerts()">
+      <entry key="removeFromFav_oneCity()">
         <State />
       </entry>
     </value>

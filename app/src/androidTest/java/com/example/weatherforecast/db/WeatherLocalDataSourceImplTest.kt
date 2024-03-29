@@ -42,65 +42,137 @@ class WeatherLocalDataSourceImplTest{
     }
 
     @Test
-    fun testGetFavCities() = runBlocking {
-        val favoriteCities = listOf(
-            FavoriteCity("City1", 1.0, 1.0),
-            FavoriteCity("City2", 2.0, 2.0)
-        )
-        database.getFavoriteCityDao().insertAllFavorites(favoriteCities)
+    fun addToFav_AndRetrieve() = runBlocking {
+        // Given
+        val favoriteCity = FavoriteCity("Test City1", 0.0, 0.0)
 
-        val storedFavorites = localDataSource.getFavCities().first()
-        assertEquals(favoriteCities, storedFavorites)
-    }
-
-    @Test
-    fun testAddToFav() = runBlocking {
-        val favoriteCity = FavoriteCity("City1", 1.0, 1.0)
+        // When
         localDataSource.addToFav(favoriteCity)
 
-        val storedFavorites = database.getFavoriteCityDao().getStoredFavoriteCities().first()
-        assertEquals(listOf(favoriteCity), storedFavorites)
+        // Then
+        val favCities = localDataSource.getFavCities().first()
+        assertEquals(1, favCities.size)
+        assertEquals(favoriteCity, favCities[0])
     }
 
     @Test
-    fun testAddToAlerts() = runBlocking {
+    fun removeFromFav_oneCity() = runBlocking {
+        // Given
+        val favoriteCity = FavoriteCity("Test City2", 0.0, 0.0)
+
+        localDataSource.addToFav(favoriteCity)
+
+        var favCities = localDataSource.getFavCities().first()
+        assertEquals(1, favCities.size)
+
+        localDataSource.removeFromFav(favoriteCity)
+
+        // Then
+        favCities = localDataSource.getFavCities().first()
+        assertEquals(0, favCities.size)
+    }
+
+//    @Test
+//    fun addToAlerts_oneAlert() = runBlocking {
+//        // Given
+//        val alertDTO = AlertDTO(
+//            id = 1,
+//            cityName = "Test City",
+//            latitude = 0.0,
+//            longitude = 0.0,
+//            startDate = "2024-03-28",
+//            endDate = "2024-03-29",
+//            time = "12:00"
+//        )
+//
+//        // When
+//        localDataSource.addToAlerts(alertDTO)
+//
+//        // Then
+//        val storedAlerts = localDataSource.getAllAlerts().first()
+//        assertEquals(1, storedAlerts.size)
+//        assertEquals(alertDTO, storedAlerts[0])
+//    }
+
+    @Test
+    fun addToAlerts_oneAlert() = runBlocking {
+        // Given
         val alertDTO = AlertDTO(
-            1,
-            "City1",
-            1.0,
-            1.0,
-            "2024-03-28",
-            "2024-03-30",
-            "08:00"
+            id = 1,
+            cityName = "Test City3",
+            latitude = 0.0,
+            longitude = 0.0,
+            startDate = "2024-03-28",
+            endDate = "2024-03-29",
+            time = "12:00"
         )
+
+        // When
         localDataSource.addToAlerts(alertDTO)
 
-        val storedAlerts = database.getAlertsDao().getStoredAlerts().first()
-        assertEquals(listOf(alertDTO), storedAlerts)
+        // Then
+        val storedAlerts = localDataSource.getAllAlerts().first()
+        assertEquals(1, storedAlerts.size)
+        assertEquals(alertDTO, storedAlerts[0])
     }
 
     @Test
-    fun testRemoveFromAlerts() = runBlocking {
+    fun removeFromAlerts_oneAlert() = runBlocking {
+        // Given
         val alertDTO = AlertDTO(
-            1,
-            "City1",
-            1.0,
-            1.0,
-            "2024-03-28",
-            "2024-03-30",
-            "08:00"
+            id = 1,
+            cityName = "Test City4",
+            latitude = 0.0,
+            longitude = 0.0,
+            startDate = "2024-03-28",
+            endDate = "2024-03-29",
+            time = "12:00"
         )
-        database.getAlertsDao().insertAlert(alertDTO)
 
-        // Verify that the alert is initially present in the database
-        var storedAlerts = database.getAlertsDao().getStoredAlerts().first()
-        assertEquals(listOf(alertDTO), storedAlerts)
+        localDataSource.addToAlerts(alertDTO)
 
-        // Remove the alert
+        var storedAlerts = localDataSource.getAllAlerts().first()
+        assertEquals(1, storedAlerts.size)
+
         localDataSource.removeFromAlerts(alertDTO)
 
-        // Verify that the alert is removed from the database
-        storedAlerts = database.getAlertsDao().getStoredAlerts().first()
-        assertEquals(emptyList<AlertDTO>(), storedAlerts)
+        storedAlerts = localDataSource.getAllAlerts().first()
+        assertEquals(0, storedAlerts.size)
     }
+
+
+    @Test
+    fun getAllFav_TwoCities() = runBlocking {
+        // Given
+        val favCity1 = FavoriteCity("City1", 10.0, 20.0)
+        val favCity2 = FavoriteCity("City2", 30.0, 40.0)
+        localDataSource.addToFav(favCity1)
+        localDataSource.addToFav(favCity2)
+
+        // When
+        val favCities = localDataSource.getFavCities().first()
+
+        // Then
+        assertEquals(2, favCities.size)
+        assertEquals(favCity1, favCities[0])
+        assertEquals(favCity2, favCities[1])
+    }
+
+    @Test
+    fun getAllAlerts_TwoAlerts() = runBlocking {
+        // Given
+        val alert1 = AlertDTO(1, "City3", 10.0, 20.0, "2024-03-28", "2024-03-29", "12:00")
+        val alert2 = AlertDTO(2, "City4", 30.0, 40.0, "2024-03-29", "2024-03-30", "15:00")
+        localDataSource.addToAlerts(alert1)
+        localDataSource.addToAlerts(alert2)
+
+        // When
+        val alerts = localDataSource.getAllAlerts().first()
+
+        // Then
+        assertEquals(2, alerts.size)
+        assertEquals(alert1, alerts[0])
+        assertEquals(alert2, alerts[1])
+    }
+
 }
