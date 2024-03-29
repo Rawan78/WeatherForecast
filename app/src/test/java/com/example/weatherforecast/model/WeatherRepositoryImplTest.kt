@@ -63,7 +63,7 @@ class WeatherRepositoryImplTest{
     }
 
     @Test
-    fun testGetFavCitiesFromRoom() = runBlockingTest {
+    fun getFavCitiesFromRoomTest() = runBlockingTest {
 
         val favCitiesFlow = repositoryFav.getFavCitiesFromRoom()
 
@@ -71,7 +71,7 @@ class WeatherRepositoryImplTest{
     }
 
     @Test
-    fun testGetAllAlertsFromRoom() = runBlockingTest {
+    fun getAllAlertsFromRoomTest() = runBlockingTest {
 
         val alertsFlow = repositoryAlerts.getAllAlertsFromRoom()
 
@@ -79,7 +79,7 @@ class WeatherRepositoryImplTest{
     }
 
     @Test
-    fun testInsertToFav() = runTest{
+    fun insertToFavTest() = runTest{
         val newFavoriteCity = FavoriteCity("New City", 3.0, 3.0)
 
         repositoryFav.insertToFav(newFavoriteCity)
@@ -93,7 +93,7 @@ class WeatherRepositoryImplTest{
     }
 
     @Test
-    fun testInsertToAlerts() = runTest{
+    fun insertToAlertsTest() = runTest{
         val newAlert = AlertDTO(1, "alert3", 3.0, 3.0,"2024-03-29", "2024-03-30", "10:00")
 
         repositoryAlerts.insertToAlerts(newAlert)
@@ -107,7 +107,7 @@ class WeatherRepositoryImplTest{
     }
 
     @Test
-    fun testDeleteFromFav() = runBlockingTest(){
+    fun deleteFromFavTest() = runBlockingTest(){
         val cityToDelete = favCitiesList.first()
         repositoryFav.deleteFromFav(cityToDelete)
         val favCitiesFlow = repositoryFav.getFavCitiesFromRoom()
@@ -115,7 +115,7 @@ class WeatherRepositoryImplTest{
     }
 
     @Test
-    fun testDeleteFromAlerts() = runBlockingTest(){
+    fun deleteFromAlertsTest() = runBlockingTest(){
         val alertToDelete = alertsList.first()
         repositoryAlerts.deleteFromAlerts(alertToDelete)
         val alertsFlow = repositoryAlerts.getAllAlertsFromRoom()

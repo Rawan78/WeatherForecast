@@ -2,22 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="addToAlerts_oneAlert()">
-        <State />
-      </entry>
-      <entry key="addToFav_AndRetrieve()">
-        <State />
-      </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="getAllFav_TwoCities()">
-        <State />
-      </entry>
-      <entry key="removeFromAlerts_oneAlert()">
-        <State />
-      </entry>
-      <entry key="removeFromFav_oneCity()">
         <State />
       </entry>
     </value>
