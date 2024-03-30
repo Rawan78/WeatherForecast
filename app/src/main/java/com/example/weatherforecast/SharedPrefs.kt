@@ -21,6 +21,9 @@ class SharedPrefs internal constructor(private val context: Context){
         private const val KEY_LONGITUDE_FOR_ALERT = "longitude_for_alert"
         private const val KEY_CITY_NAME_FOR_ALERT = "city_name_for_alert"
 
+        private const val KEY_ALARM_TYPE = "alarm_type"
+        private const val KEY_ALARM_STATE = "alarm_state"
+
 
         @SuppressLint("StaticFieldLeak")
         private var instance : SharedPrefs? = null
@@ -134,6 +137,24 @@ class SharedPrefs internal constructor(private val context: Context){
 
     fun getCityNameForAlert(): String? {
         return prefs.getString(KEY_CITY_NAME_FOR_ALERT, "")
+    }
+
+    //For Alarm Type
+    fun setAlamType(alarmType: String) {
+        prefs.edit().putString(KEY_ALARM_TYPE, alarmType).apply()
+    }
+
+    fun getAlarmType(): String? {
+        return prefs.getString(KEY_ALARM_TYPE, "")
+    }
+
+    //For Alarm Type
+    fun setAlarmState(alarmState: String) {
+        prefs.edit().putString(KEY_ALARM_STATE, alarmState).apply()
+    }
+
+    fun getAlarmState(): String? {
+        return prefs.getString(KEY_ALARM_STATE, "")
     }
 
 

@@ -2,12 +2,10 @@ package com.example.weatherforecast.AlertScreen.viewModel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.weatherforecast.FavoriteScreen.viewModel.FavoriteCityViewModel
 import com.example.weatherforecast.MainCoroutineRule
 import com.example.weatherforecast.db.LocalState
 import com.example.weatherforecast.getOrAwaitValue
 import com.example.weatherforecast.model.FakeWeatherRepository
-import com.example.weatherforecast.model.FavoriteCity
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before

@@ -1,4 +1,4 @@
-package com.example.weatherforecast
+package com.example.weatherforecast.FavoriteScreen.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.example.weatherforecast.HomeScreen.view.*
 import com.example.weatherforecast.HomeScreen.viewModel.*
+import com.example.weatherforecast.R
+import com.example.weatherforecast.SharedPrefs
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

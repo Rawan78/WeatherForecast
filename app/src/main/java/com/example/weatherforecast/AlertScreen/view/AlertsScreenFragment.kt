@@ -173,6 +173,30 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
             showAlertDialog()
         }
 
+        val lastSelectedOption = sharedPrefs.getAlarmType()
+
+        // Set the default option to alarm type if no option is previously selected
+        if (lastSelectedOption.isNullOrEmpty()) {
+            binding.radioNotification.isChecked = true
+        } else {
+            // Set the last selected option
+            when (lastSelectedOption) {
+                "default_alarm_sound" -> binding.radioDefaultAlarmSound.isChecked = true
+                "notification" -> binding.radioNotification.isChecked = true
+            }
+        }
+
+        binding.radioGroupAlert.setOnCheckedChangeListener{ _, checkedId ->
+            when (checkedId) {
+                R.id.radio_default_alarm_sound -> {
+                    sharedPrefs.setAlamType("default_alarm_sound")
+                }
+                R.id.radio_notification -> {
+                    sharedPrefs.setAlamType("notification")
+                }
+            }
+        }
+
         setSwitchButtonAlarm()
     }
 
@@ -190,19 +214,36 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setSwitchButtonAlarm(){
-        binding.switchAlarm.thumbTintList = getColorStateList(requireContext(),R.color.white)
-        binding.switchAlarm.trackTintList = getColorStateList(requireContext(),R.color.black) 
+        // Load the last saved alarm state
+        val lastAlarmState = sharedPrefs.getAlarmState()?.toBoolean()
+
+        // Set the switch button state
+        binding.switchAlarm.isChecked = lastAlarmState ?: false
+
+        // Set the switch button colors based on its state
+        if (binding.switchAlarm.isChecked) {
+            binding.switchAlarm.thumbTintList = getColorStateList(requireContext(), R.color.white)
+            binding.switchAlarm.trackTintList = getColorStateList(requireContext(), R.color.black)
+        } else {
+            binding.switchAlarm.thumbTintList = getColorStateList(requireContext(), R.color.darkGray)
+            binding.switchAlarm.trackTintList = getColorStateList(requireContext(), R.color.black)
+        }
 
         binding.switchAlarm.setOnCheckedChangeListener { buttonView, isChecked ->
+            // Set the switch button colors based on its state
             if (isChecked) {
-                binding.switchAlarm.thumbTintList = getColorStateList(requireContext(),R.color.white)
-                binding.switchAlarm.trackTintList = getColorStateList( requireContext(),R.color.black)
+                binding.switchAlarm.thumbTintList = getColorStateList(requireContext(), R.color.white)
+                binding.switchAlarm.trackTintList = getColorStateList(requireContext(), R.color.black)
             } else {
-                binding.switchAlarm.thumbTintList = getColorStateList(requireContext(),R.color.darkGray)
+                binding.switchAlarm.thumbTintList = getColorStateList(requireContext(), R.color.darkGray)
                 binding.switchAlarm.trackTintList = getColorStateList(requireContext(), R.color.black)
             }
+
+            // Save the alarm state to SharedPreferences
+            sharedPrefs.setAlarmState(isChecked.toString())
         }
     }
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun showAlertDialog() {
@@ -269,9 +310,14 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
                     time = timeForAlert
                 )
 
-                scheduleMyAlarm(alert)
-
-                scheduleAlarmForAlert(alert)
+                // Check if the alarm is on before scheduling
+                if (sharedPrefs.getAlarmState()?.toBoolean() == true) {
+                    if (sharedPrefs.getAlarmType()=="default_alarm_sound") {
+                        scheduleMyAlarm(alert)
+                    } else {
+                        scheduleAlarmForAlert(alert)
+                    }
+                }
 
                 alertScreenViewModel.insertToAlerts(alert)
                 alertDialog.dismiss()

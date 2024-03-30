@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CityDetailsActivity">
+    tools:context=".FavoriteScreen.view.CityDetailsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_container"
@@ -148,7 +148,7 @@
             android:layout_marginStart="23dp"
             android:layout_marginEnd="224dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/_7_day_forecast"
+            android:text="@string/_6_day_forecast"
             android:textColor="@color/navyBlue"
             android:textSize="25dp"
             android:textStyle="bold"

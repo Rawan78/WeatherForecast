@@ -24,7 +24,6 @@ import com.example.weatherforecast.databinding.FragmentFavoritesScreenBinding
 import com.example.weatherforecast.db.LocalState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.example.weatherforecast.CityDetailsActivity
 
 
 class FavoritesScreenFragment : Fragment() , OnFavCityClickListener{

@@ -36,7 +36,7 @@
             android:exported="true"/>
 
         <activity
-            android:name=".CityDetailsActivity"
+            android:name=".FavoriteScreen.view.CityDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".Map.view.OpenStreetMapActivity"
