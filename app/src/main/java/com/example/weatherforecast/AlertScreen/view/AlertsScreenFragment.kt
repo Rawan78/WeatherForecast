@@ -7,6 +7,7 @@ import android.app.DatePickerDialog
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -39,6 +40,7 @@ import com.example.weatherforecast.db.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.example.weatherforecast.SharedPrefs
+import com.example.weatherforecast.Map.view.*
 
 
 import com.example.weatherforecast.network.*
@@ -171,6 +173,11 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
 //            val intent = Intent(requireActivity(), OpenStreetMapActivity::class.java)
 //            startActivity(intent)
             showAlertDialog()
+        }
+
+        binding.fabGoToMap.setOnClickListener {
+                val intent = Intent(requireActivity(), OpenStreetMapActivity::class.java)
+                startActivity(intent)
         }
 
         val lastSelectedOption = sharedPrefs.getAlarmType()
@@ -374,8 +381,27 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
     }
 
     override fun onAlertClick(alertDTO: AlertDTO) {
-        alertScreenViewModel.removeFromAlerts(alertDTO)
-        Toast.makeText(requireContext(), "Alert for ${alertDTO.cityName} deleted", Toast.LENGTH_SHORT).show()
+        showDeleteConfirmationDialog(alertDTO)
+    }
+
+
+    private fun showDeleteConfirmationDialog(alertDTO: AlertDTO) {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Delete Alert")
+        alertDialogBuilder.setMessage("Are you sure you want to delete ${alertDTO.cityName} from alerts?")
+
+        alertDialogBuilder.setPositiveButton("Yes") { dialogInterface: DialogInterface, _: Int ->
+            alertScreenViewModel.removeFromAlerts(alertDTO)
+            Toast.makeText(requireContext(), "Alert for ${alertDTO.cityName} deleted", Toast.LENGTH_SHORT).show()
+            dialogInterface.dismiss()
+        }
+
+        alertDialogBuilder.setNegativeButton("No") { dialogInterface: DialogInterface, _: Int ->
+            dialogInterface.dismiss()
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
     }
 
 

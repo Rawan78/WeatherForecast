@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat.recreate
+import androidx.lifecycle.lifecycleScope
 import com.example.weatherforecast.R
 import com.example.weatherforecast.databinding.FragmentSettingsScreenBinding
 import com.example.weatherforecast.Map.view.*
 import com.example.weatherforecast.SharedPrefs
-
+import kotlinx.coroutines.launch
 
 
 class SettingsScreenFragment : Fragment() {
@@ -34,21 +35,29 @@ class SettingsScreenFragment : Fragment() {
             val windSpeedPreference = sharedPrefs.getWindSpeedPreference()
 
             // Check the appropriate radio button based on the wind speed preference
-            when (windSpeedPreference) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                sharedPrefs.windSpeedFlow.collect { speed ->
+                    // Update UI based on wind speed preference change
+                    when (speed) {
+                        "Miles/Hour" -> radioMilHour.isChecked = true
+                        "Meter/Sec" -> radioMeterSec.isChecked = true
+                    }
+                }
+            }
+
+            when (sharedPrefs.getWindSpeedPreference()) {
                 "Miles/Hour" -> radioMilHour.isChecked = true
                 "Meter/Sec" -> radioMeterSec.isChecked = true
-                else -> radioMeterSec.isChecked = true // Default to "Meter/Sec" if the preference is not set
             }
 
             // Set the radio button listener
-            radioGroupWind.setOnCheckedChangeListener { group, checkedId ->
+            radioGroupWind.setOnCheckedChangeListener { _, checkedId ->
                 val selectedOption = when (checkedId) {
                     R.id.radio_mil_hour -> "Miles/Hour"
                     R.id.radio_meter_sec -> "Meter/Sec"
                     else -> "Meter/Sec"
                 }
                 selectedOption?.let {
-                    sharedPrefs.clearWindSpeedPreference()
                     sharedPrefs.setWindSpeedPreference(it)
                     Toast.makeText(context, "$it selected", Toast.LENGTH_SHORT).show()
                 }

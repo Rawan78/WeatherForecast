@@ -15,11 +15,12 @@
         android:padding="16dp">
 
         <!-- Weather Icon -->
+
         <ImageView
-            android:id="@+id/iv_remove_city_from_fav"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/removeicon"
+            android:id="@+id/iv_red"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/iconfavorite"
             android:layout_gravity="center_vertical"
             android:contentDescription="Remove From Fav" />
 
@@ -34,6 +35,13 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp" />
 
+        <ImageView
+            android:id="@+id/iv_remove_city_from_fav"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/removeicon"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="Remove From Fav" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

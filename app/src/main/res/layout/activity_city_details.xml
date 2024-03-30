@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroundhomee"
     tools:context=".FavoriteScreen.view.CityDetailsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -231,6 +232,14 @@
                     android:textSize="20dp"
                     android:textStyle="italic" />
 
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|center"
+                    android:src="@drawable/wind"
+                    android:layout_marginEnd="5dp"
+                    />
+
             </androidx.cardview.widget.CardView>
 
             <!-- Second Card -->
@@ -266,6 +275,14 @@
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|center"
+                    android:src="@drawable/humidity"
+                    android:layout_marginEnd="5dp"
+                    />
 
             </androidx.cardview.widget.CardView>
 
@@ -317,6 +334,14 @@
                     android:textSize="20dp"
                     android:textStyle="italic" />
 
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|center"
+                    android:src="@drawable/thermometer"
+                    android:layout_marginEnd="5dp"
+                    />
+
             </androidx.cardview.widget.CardView>
 
             <!-- Second Card -->
@@ -352,6 +377,14 @@
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|center"
+                    android:src="@drawable/clouds"
+                    android:layout_marginEnd="5dp"
+                    />
 
             </androidx.cardview.widget.CardView>
 
@@ -403,6 +436,14 @@
                     android:textSize="20dp"
                     android:textStyle="italic" />
 
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|center"
+                    android:src="@drawable/sunrise"
+                    android:layout_marginEnd="5dp"
+                    />
+
             </androidx.cardview.widget.CardView>
 
             <!-- Second Card -->
@@ -438,6 +479,14 @@
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="italic" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|center"
+                    android:src="@drawable/sunset"
+                    android:layout_marginEnd="5dp"
+                    />
 
             </androidx.cardview.widget.CardView>
 

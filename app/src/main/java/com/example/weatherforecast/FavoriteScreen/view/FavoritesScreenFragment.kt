@@ -1,5 +1,7 @@
 package com.example.weatherforecast.FavoriteScreen.view
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -101,8 +103,8 @@ class FavoritesScreenFragment : Fragment() , OnFavCityClickListener{
     }
 
     override fun onFavCityClick(favoriteCity: FavoriteCity) {
-        favoriteCityViewModel.removeCityFromFavorite(favoriteCity)
-        Toast.makeText(requireContext(), "${favoriteCity.name} removed from favorites", Toast.LENGTH_SHORT).show()
+        showDeleteConfirmationDialog(favoriteCity)
+        //Toast.makeText(requireContext(), "${favoriteCity.name} removed from favorites", Toast.LENGTH_SHORT).show()
 
     }
 
@@ -111,5 +113,24 @@ class FavoritesScreenFragment : Fragment() , OnFavCityClickListener{
         intent.putExtra("favoriteCity", favoriteCity)
         startActivity(intent)
 
+    }
+
+    private fun showDeleteConfirmationDialog(favoriteCity: FavoriteCity) {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Delete City")
+        alertDialogBuilder.setMessage("Are you sure you want to delete ${favoriteCity.name} from favorites?")
+
+        alertDialogBuilder.setPositiveButton("Yes") { dialogInterface: DialogInterface, _: Int ->
+            favoriteCityViewModel.removeCityFromFavorite(favoriteCity)
+            Toast.makeText(requireContext(), "${favoriteCity.name} removed from favorites", Toast.LENGTH_SHORT).show()
+            dialogInterface.dismiss()
+        }
+
+        alertDialogBuilder.setNegativeButton("No") { dialogInterface: DialogInterface, _: Int ->
+            dialogInterface.dismiss()
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
     }
 }

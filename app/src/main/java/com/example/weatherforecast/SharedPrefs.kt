@@ -3,8 +3,13 @@ package com.example.weatherforecast
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 class SharedPrefs internal constructor(private val context: Context){
+
+    private val _windSpeedFlow = MutableSharedFlow<String>()
+    val windSpeedFlow = _windSpeedFlow.asSharedFlow()
 
     companion object{
         private const val SHARED_PREFS_NAME = "my_prefs"
@@ -23,6 +28,9 @@ class SharedPrefs internal constructor(private val context: Context){
 
         private const val KEY_ALARM_TYPE = "alarm_type"
         private const val KEY_ALARM_STATE = "alarm_state"
+
+
+        private const val DEFAULT_WIND_SPEED = "Meter/Sec"
 
 
         @SuppressLint("StaticFieldLeak")
@@ -44,14 +52,16 @@ class SharedPrefs internal constructor(private val context: Context){
     //For Wind Speed
     fun setWindSpeedPreference(speed: String) {
         prefs.edit().putString(KEY_WIND_SPEED, speed).apply()
+        _windSpeedFlow.tryEmit(speed)
     }
 
     fun getWindSpeedPreference(): String? {
-        return prefs.getString(KEY_WIND_SPEED, "Meter/Sec")
+        return prefs.getString(KEY_WIND_SPEED, DEFAULT_WIND_SPEED)
     }
 
     fun clearWindSpeedPreference() {
         prefs.edit().remove(KEY_WIND_SPEED).apply()
+        _windSpeedFlow.tryEmit(DEFAULT_WIND_SPEED)
     }
 
     //For Language

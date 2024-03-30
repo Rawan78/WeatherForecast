@@ -133,6 +133,17 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_go_to_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="90dp"
+        android:src="@drawable/location"
+        app:backgroundTint="@color/navyBlue"
+        app:shapeAppearanceOverlay="@style/RoundedShapeAppearance" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_alarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

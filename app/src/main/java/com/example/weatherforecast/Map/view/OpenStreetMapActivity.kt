@@ -151,6 +151,7 @@ class OpenStreetMapActivity() : AppCompatActivity() , MapListener {
 
             binding.fabAddAlert.setOnClickListener {
                 storeSelectedLocationForAlert()
+                Toast.makeText(this@OpenStreetMapActivity, "Added to alerts" , Toast.LENGTH_LONG).show()
             }
 
             return true
