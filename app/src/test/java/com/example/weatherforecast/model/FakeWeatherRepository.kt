@@ -64,4 +64,16 @@ class FakeWeatherRepository: WeatherRepository {
     override suspend fun deleteFromAlerts(alertDTO: AlertDTO) {
         fakeAlerts.remove(alertDTO)
     }
+
+    override suspend fun getAllCurrentWeatherFromRoom(): Flow<List<WeatherResponse>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertCurrentWeather(weatherResponse: WeatherResponse) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteStoredCurrentWeather() {
+        TODO("Not yet implemented")
+    }
 }

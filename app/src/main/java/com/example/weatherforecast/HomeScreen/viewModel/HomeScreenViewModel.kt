@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherforecast.db.LocalState
 import com.example.weatherforecast.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,4 +34,54 @@ class HomeScreenViewModel(private val weatherRepository: WeatherRepository) : Vi
                 }
         }
     }
+
+
+    //Room
+//    fun getStoredWeatherFromRoom(){
+//        viewModelScope.launch{
+//            weatherRepository.getAllCurrentWeatherFromRoom()
+//                .catch {
+//                    _currentWeather.value = WeatherState.Failure(it)
+//                }
+//                .collect{
+//                        data -> _currentWeather.value = WeatherState.Success(data)
+//                }
+//            Log.i(TAG, "getStoredWeatherFromRoom: ")
+//
+//        }
+//    }
+
+    // Room
+    fun getStoredWeatherFromRoom() {
+        viewModelScope.launch {
+            weatherRepository.getAllCurrentWeatherFromRoom()
+                .catch { exception ->
+                    _currentWeather.value = WeatherState.Failure(exception)
+                }
+                .collect { data ->
+                    if (data != null) {
+                        _currentWeather.value = WeatherState.Success(data)
+                    } else {
+                        // Handle the case where data is null
+                        _currentWeather.value = WeatherState.Failure(NullPointerException("Stored weather data is null"))
+                    }
+                }
+            Log.i(TAG, "getStoredWeatherFromRoom: ")
+        }
+    }
+
+
+    fun insertCurrentWeather(weatherResponse : WeatherResponse){
+        viewModelScope.launch(Dispatchers.IO) {
+            weatherRepository.insertCurrentWeather(weatherResponse)
+            //getStoredWeatherFromRoom()
+        }
+    }
+    fun removeAllStoredWeather(){
+        viewModelScope.launch(Dispatchers.IO) {
+            weatherRepository.deleteStoredCurrentWeather()
+            //getStoredWeatherFromRoom()
+        }
+    }
+
 }

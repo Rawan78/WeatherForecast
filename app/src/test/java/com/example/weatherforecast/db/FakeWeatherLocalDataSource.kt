@@ -1,6 +1,7 @@
 package com.example.weatherforecast.db
 
 import com.example.weatherforecast.model.FavoriteCity
+import com.example.weatherforecast.model.WeatherResponse
 import com.example.weatherforecast.modelForAlerts.AlertDTO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,5 +32,17 @@ class FakeWeatherLocalDataSource: WeatherLocalDataSource {
 
     override suspend fun removeFromAlerts(alertDTO: AlertDTO) {
         fakeAlerts.value = fakeAlerts.value - alertDTO
+    }
+
+    override fun getAllStoredWeather(): Flow<List<WeatherResponse>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addCurrentWeather(weatherResponse: WeatherResponse) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeAllWeather() {
+        TODO("Not yet implemented")
     }
 }

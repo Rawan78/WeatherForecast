@@ -15,4 +15,10 @@ interface WeatherLocalDataSource {
     fun getAllAlerts(): Flow<List<AlertDTO>>
     suspend fun addToAlerts(alertDTO: AlertDTO)
     suspend fun removeFromAlerts(alertDTO: AlertDTO)
+
+    //For stored weather
+    fun getAllStoredWeather(): Flow<WeatherResponse>
+    suspend fun addCurrentWeather(weatherResponse: WeatherResponse)
+    suspend fun removeAllWeather()
+
 }

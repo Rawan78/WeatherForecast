@@ -1,8 +1,12 @@
 package com.example.weatherforecast.HomeScreen.view
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 
 import android.os.Bundle
 import android.os.Looper
@@ -15,6 +19,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -127,6 +132,7 @@ class HomeScreenFragment : Fragment() {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -155,28 +161,29 @@ class HomeScreenFragment : Fragment() {
 //            AlertScreenViewModel::class.java)
 
 
-        lifecycleScope.launch{
-            homeScreenViewModel.currentWeather.collectLatest{result ->
-                when (result){
-                    is WeatherState.Loading -> {
-                        progressBarHome.visibility = View.VISIBLE
-                        //recyclerViewFavoriteCities.visibility = View.GONE
-
-                        Log.i(TAG, "onCreate: loading")
-                    }
-                    is WeatherState.Success -> {
-                        updateUI(result.weatherResponse)
-                        progressBarHome.visibility = View.GONE
-                       // recyclerViewFavoriteCities.visibility = View.VISIBLE
-                       // favoriteCityAdapter.setCities(result.favoriteCity)
-                    }
-                    else -> {
-                        progressBarHome.visibility = View.GONE
-                        Toast.makeText(requireContext(), "Failed to fetch cities", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
+//        lifecycleScope.launch{
+//            homeScreenViewModel.currentWeather.collectLatest{result ->
+//                when (result){
+//                    is WeatherState.Loading -> {
+//                        progressBarHome.visibility = View.VISIBLE
+//                        //recyclerViewFavoriteCities.visibility = View.GONE
+//
+//                        Log.i(TAG, "onCreate: loading")
+//                    }
+//                    is WeatherState.Success -> {
+//                        updateUI(result.weatherResponse)
+//                        progressBarHome.visibility = View.GONE
+//                        //homeScreenViewModel.insertCurrentWeather(result.weatherResponse)
+//                       // recyclerViewFavoriteCities.visibility = View.VISIBLE
+//                       // favoriteCityAdapter.setCities(result.favoriteCity)
+//                    }
+//                    else -> {
+//                        progressBarHome.visibility = View.GONE
+//                        Toast.makeText(requireContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+//        }
 
 //        lifecycleScope.launch{
 //            alertScreenViewModel.currentWeatherAlert.collectLatest{result ->
@@ -217,33 +224,99 @@ class HomeScreenFragment : Fragment() {
             adapter = fiveDayForecastAdapter
         }
 
-        if (locationMode == "GPS") {
-            requestLocationUpdates()
-        } else if (locationMode == "Map") {
-            // Retrieve selected location from SharedPreferences and show weather
-            val latitude = sharedPrefs.getLatitude()
-            val longitude = sharedPrefs.getLongitude()
-            val temperatureUnits = getTemperatureUnits()
-            Log.i(TAG, "onViewCreated: sharedPrefs.getLatitude() : $latitude , sharedPrefs.getLongitude() : $longitude")
-            val selectedLanguage = sharedPrefs.getLanguage() ?: "en"
-            homeScreenViewModel.getCurrentWeather(latitude, longitude, units = temperatureUnits, lang = selectedLanguage)
-            setLocale(selectedLanguage)
-        } else {
-            requestLocationUpdates()
+        if (isNetworkAvailable()) {
+            homeScreenViewModel.removeAllStoredWeather()
 
-            Toast.makeText(requireContext(), "Please select a location mode", Toast.LENGTH_SHORT).show()
+
+            if (locationMode == "GPS") {
+                requestLocationUpdates()
+            } else if (locationMode == "Map") {
+                // Retrieve selected location from SharedPreferences and show weather
+                val latitude = sharedPrefs.getLatitude()
+                val longitude = sharedPrefs.getLongitude()
+                val temperatureUnits = getTemperatureUnits()
+                Log.i(TAG, "onViewCreated: sharedPrefs.getLatitude() : $latitude , sharedPrefs.getLongitude() : $longitude")
+                val selectedLanguage = sharedPrefs.getLanguage() ?: "en"
+                homeScreenViewModel.getCurrentWeather(
+                    latitude,
+                    longitude,
+                    units = temperatureUnits,
+                    lang = selectedLanguage
+                )
+                setLocale(selectedLanguage)
+            } else {
+                requestLocationUpdates()
+                Toast.makeText(
+                    requireContext(),
+                    "Please select a location mode",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            lifecycleScope.launch{
+                homeScreenViewModel.currentWeather.collectLatest{result ->
+                    when (result){
+                        is WeatherState.Loading -> {
+                            progressBarHome.visibility = View.VISIBLE
+                            //recyclerViewFavoriteCities.visibility = View.GONE
+
+                            Log.i(TAG, "onCreate: loading")
+                        }
+                        is WeatherState.Success -> {
+                            updateUI(result.weatherResponse)
+                            progressBarHome.visibility = View.GONE
+                            homeScreenViewModel.insertCurrentWeather(result.weatherResponse)
+                            // recyclerViewFavoriteCities.visibility = View.VISIBLE
+                            // favoriteCityAdapter.setCities(result.favoriteCity)
+                        }
+                        else -> {
+                            progressBarHome.visibility = View.GONE
+                            Toast.makeText(requireContext(), "Failed to fetch data from internet", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+
+        }else {
+            Log.i(TAG, "onViewCreated: disconnected to internet")
+            lifecycleScope.launch{
+                homeScreenViewModel.currentWeather.collectLatest{result ->
+                    when (result){
+                        is WeatherState.Loading -> {
+                           progressBarHome.visibility = View.VISIBLE                         
+                        //recyclerViewFavoriteCities.visibility = View.GONE
+                            Log.i(TAG, "onViewCreated: loading data from database ")
+                        }
+                        is WeatherState.Success -> {
+                            Log.i(TAG, "onViewCreated: successed retrieving data from Room ")
+                            updateUI(result.weatherResponse)
+                            progressBarHome.visibility = View.GONE
+
+                            Log.i(TAG, "onViewCreated: ${result.weatherResponse.city.name}")
+                            
+                            // recyclerViewFavoriteCities.visibility = View.VISIBLE
+                            // favoriteCityAdapter.setCities(result.favoriteCity)
+                        }
+                        else -> {
+                            progressBarHome.visibility = View.GONE
+                            Toast.makeText(requireContext(), "Failed to fetch data from Room", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            homeScreenViewModel.getStoredWeatherFromRoom()
         }
 
-       // requestLocationUpdates()
-        //alertScreenViewModel.getCurrentWeatherAlert(46.8182, 8.2275)
-
-
     }
 
-
-    fun testAlert(weatherAlertResponse: WeatherAlertResponse){
-       // Log.i(TAG, "testAlert: ${weatherAlertResponse.alerts[0].event} , ${weatherAlertResponse.alerts[0].description}")
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
+
 
     private fun updateUI(weatherResponse: WeatherResponse) {
 
@@ -269,7 +342,6 @@ class HomeScreenFragment : Fragment() {
         currentCity.text = weatherResponse.city.name
 
         // Set Current wind speed and humidity
-        //val windSpeed = weatherResponse.list[0].wind?.speed ?: 0.0
         val humidity = weatherResponse.list[0].main?.humidity ?: 0
 
         //currentWindSpeed.text = "${windSpeed} m/s"
@@ -290,8 +362,6 @@ class HomeScreenFragment : Fragment() {
 
         // Update the wind speed TextView with the converted wind speed
         currentWindSpeed.text = "$convertedWindSpeed $windSpeedPreference"
-
-       // homeScreenViewModel.getCurrentWeather(latitude, longitude)
 
         // Set Current pressure and clouds
 

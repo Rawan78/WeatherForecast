@@ -42,7 +42,7 @@ class WeatherLocalDataSourceImplTest{
     }
 
     @Test
-    fun addToFav_AndRetrieve() = runBlocking {
+    fun addToFavTest_AndRetrieve() = runBlocking {      //pass
         // Given
         val favoriteCity = FavoriteCity("Test City1", 0.0, 0.0)
 
@@ -56,7 +56,7 @@ class WeatherLocalDataSourceImplTest{
     }
 
     @Test
-    fun removeFromFav_oneCity() = runBlocking {
+    fun removeFromFavTest_oneCity() = runBlocking {   //pass
         // Given
         val favoriteCity = FavoriteCity("Test City2", 0.0, 0.0)
 
@@ -95,7 +95,7 @@ class WeatherLocalDataSourceImplTest{
 //    }
 
     @Test
-    fun addToAlerts_oneAlert() = runBlocking {
+    fun addToAlertsTest_oneAlert() = runBlocking {   //pass
         // Given
         val alertDTO = AlertDTO(
             id = 1,
@@ -117,7 +117,7 @@ class WeatherLocalDataSourceImplTest{
     }
 
     @Test
-    fun removeFromAlerts_oneAlert() = runBlocking {
+    fun removeFromAlertsTest_oneAlert() = runBlocking {    //pass
         // Given
         val alertDTO = AlertDTO(
             id = 1,
@@ -142,7 +142,7 @@ class WeatherLocalDataSourceImplTest{
 
 
     @Test
-    fun getAllFav_TwoCities() = runBlocking {
+    fun getAllFavTest_TwoCities() = runBlocking {    //pass
         // Given
         val favCity1 = FavoriteCity("City1", 10.0, 20.0)
         val favCity2 = FavoriteCity("City2", 30.0, 40.0)
@@ -159,7 +159,7 @@ class WeatherLocalDataSourceImplTest{
     }
 
     @Test
-    fun getAllAlerts_TwoAlerts() = runBlocking {
+    fun getAllAlertsTest_TwoAlerts() = runBlocking {   //pass
         // Given
         val alert1 = AlertDTO(1, "City3", 10.0, 20.0, "2024-03-28", "2024-03-29", "12:00")
         val alert2 = AlertDTO(2, "City4", 30.0, 40.0, "2024-03-29", "2024-03-30", "15:00")

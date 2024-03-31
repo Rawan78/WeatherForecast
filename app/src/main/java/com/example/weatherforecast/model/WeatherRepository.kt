@@ -21,4 +21,9 @@ interface WeatherRepository {
     suspend fun getAllAlertsFromRoom(): Flow<List<AlertDTO>>
     suspend fun insertToAlerts(alertDTO: AlertDTO)
     suspend fun deleteFromAlerts(alertDTO: AlertDTO)
+
+    // For Stored Weather
+     fun getAllCurrentWeatherFromRoom(): Flow<WeatherResponse>
+    suspend fun insertCurrentWeather(weatherResponse: WeatherResponse)
+    suspend fun deleteStoredCurrentWeather()
 }

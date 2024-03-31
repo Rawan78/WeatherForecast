@@ -69,5 +69,17 @@ class WeatherRepositoryImpl private constructor(
         localSource.removeFromAlerts(alertDTO)
     }
 
+    override fun getAllCurrentWeatherFromRoom(): Flow<WeatherResponse> {
+        return localSource.getAllStoredWeather()
+    }
+
+    override suspend fun insertCurrentWeather(weatherResponse: WeatherResponse) {
+        localSource.addCurrentWeather(weatherResponse)
+    }
+
+    override suspend fun deleteStoredCurrentWeather() {
+        localSource.removeAllWeather()
+    }
+
 
 }
