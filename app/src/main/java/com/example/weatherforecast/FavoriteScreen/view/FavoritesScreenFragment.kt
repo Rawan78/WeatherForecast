@@ -1,8 +1,10 @@
 package com.example.weatherforecast.FavoriteScreen.view
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -47,6 +49,7 @@ class FavoritesScreenFragment : Fragment() , OnFavCityClickListener{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         recyclerViewFavoriteCities = binding.rvFavoriteCities
         recyclerViewFavoriteCities.layoutManager = LinearLayoutManager(requireContext())
@@ -109,6 +112,14 @@ class FavoritesScreenFragment : Fragment() , OnFavCityClickListener{
     }
 
     override fun onFavCityClickForDetails(favoriteCity: FavoriteCity) {
+
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        if (networkInfo == null || !networkInfo.isConnected) {
+            Toast.makeText(requireContext(), "Please connect to the internet", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val intent = Intent(requireContext(), CityDetailsActivity::class.java)
         intent.putExtra("favoriteCity", favoriteCity)
         startActivity(intent)

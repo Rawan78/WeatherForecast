@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -83,6 +84,8 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
         super.onAttach(context)
         isContextAttached = true
         sharedPrefs = SharedPrefs.getInstance(context)
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -94,6 +97,14 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+
+        if (networkInfo == null || !networkInfo.isConnected) {
+            Toast.makeText(requireContext(), "Please connect to the internet to set alerts", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         if (!isContextAttached) {
             return

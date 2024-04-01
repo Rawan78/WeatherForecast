@@ -246,11 +246,11 @@ class HomeScreenFragment : Fragment() {
                 setLocale(selectedLanguage)
             } else {
                 requestLocationUpdates()
-                Toast.makeText(
-                    requireContext(),
-                    "Please select a location mode",
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Please select a location mode",
+//                    Toast.LENGTH_SHORT
+//                ).show()
             }
 
             lifecycleScope.launch{
@@ -344,8 +344,6 @@ class HomeScreenFragment : Fragment() {
         // Set Current wind speed and humidity
         val humidity = weatherResponse.list[0].main?.humidity ?: 0
 
-        //currentWindSpeed.text = "${windSpeed} m/s"
-
         currentHumidity.text = "${humidity}%"
 
         // Convert wind speed from m/s to the preferred unit (e.g., Miles/Hour or Meter/Sec) based on user preference
@@ -399,7 +397,6 @@ class HomeScreenFragment : Fragment() {
 
         hourlyForecastAdapter.setList(weatherResponse.list)
         fiveDayForecastAdapter.setList(weatherResponse.list)
-
 
     }
 

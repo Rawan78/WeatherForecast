@@ -65,7 +65,7 @@ class FakeWeatherRepository: WeatherRepository {
         fakeAlerts.remove(alertDTO)
     }
 
-    override suspend fun getAllCurrentWeatherFromRoom(): Flow<List<WeatherResponse>> {
+    override  fun getAllCurrentWeatherFromRoom(): Flow<WeatherResponse>{
         TODO("Not yet implemented")
     }
 

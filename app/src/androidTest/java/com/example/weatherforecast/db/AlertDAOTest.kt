@@ -18,7 +18,7 @@ import org.junit.Assert.assertEquals
 
 @SmallTest
 @RunWith(AndroidJUnit4::class)
-class AlertDAOTes {
+class AlertDAOTest {
     lateinit var database: WeatherDatabase
     lateinit var dao : AlertDAO
 

@@ -1,6 +1,8 @@
 package com.example.weatherforecast.Settings.view
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -28,6 +30,14 @@ class SettingsScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+
+        if (networkInfo == null || !networkInfo.isConnected) {
+            Toast.makeText(requireContext(), "Please connect to the internet", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         sharedPrefs = SharedPrefs.getInstance(requireContext())
 
@@ -101,6 +111,15 @@ class SettingsScreenFragment : Fragment() {
                 }
             }
 
+            val rootView = view?.rootView
+            rootView?.layoutDirection =
+                if (selectedLanguage == "ar") {
+                    View.LAYOUT_DIRECTION_RTL
+                } else{
+                    View.LAYOUT_DIRECTION_LTR
+                }
+
+
             // Location Settings
             val locationPreference = sharedPrefs.getLocationMode()
             when (locationPreference) {
@@ -128,9 +147,7 @@ class SettingsScreenFragment : Fragment() {
                     }
                 }
             }
-
         }
-
     }
     companion object {
         private const val LOCATION_GPS = "GPS"

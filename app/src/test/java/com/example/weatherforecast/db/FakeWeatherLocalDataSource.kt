@@ -34,7 +34,7 @@ class FakeWeatherLocalDataSource: WeatherLocalDataSource {
         fakeAlerts.value = fakeAlerts.value - alertDTO
     }
 
-    override fun getAllStoredWeather(): Flow<List<WeatherResponse>> {
+    override fun getAllStoredWeather(): Flow<WeatherResponse> {
         TODO("Not yet implemented")
     }
 

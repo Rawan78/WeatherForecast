@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
-        android:src="@drawable/add_icon"
+        android:src="@drawable/iconfavorite"
         android:contentDescription="add_icon"
         app:backgroundTint="@color/navyBlue"
         android:layout_alignParentBottom="true"

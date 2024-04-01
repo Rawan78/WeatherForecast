@@ -2,22 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="addToAlerts_oneAlert()">
+      <entry key="addToAlertsTest_oneAlert()">
         <State />
       </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="getAllAlerts_TwoAlerts()">
+      <entry key="getAllAlertsTest_TwoAlerts()">
         <State />
       </entry>
-      <entry key="getAllFav_TwoCities()">
+      <entry key="getAllFavTest_TwoCities()">
         <State />
       </entry>
-      <entry key="removeFromAlerts_oneAlert()">
+      <entry key="removeFromAlertsTest_oneAlert()">
         <State />
       </entry>
-      <entry key="removeFromFav_oneCity()">
+      <entry key="removeFromFavTest_oneCity()">
         <State />
       </entry>
     </value>
