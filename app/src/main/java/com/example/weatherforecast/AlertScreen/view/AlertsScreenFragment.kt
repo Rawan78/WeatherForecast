@@ -74,7 +74,6 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
 
      var alertDescription: String? = null
      var countryName: String? = null
-
 //    val latitudeForAlert: Double = sharedPrefs.getLatitudeForAlert()
 //    val longitudeForAlert: Double = sharedPrefs.getLongitudeForAlert()
 //    val currentLanguage = sharedPrefs.getLanguage()
@@ -327,7 +326,6 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
                     endDate = end_date,
                     time = timeForAlert
                 )
-
                 // Check if the alarm is on before scheduling
                 if (sharedPrefs.getAlarmState()?.toBoolean() == true) {
                     if (sharedPrefs.getAlarmType()=="default_alarm_sound") {
@@ -336,7 +334,6 @@ class AlertsScreenFragment : Fragment()  , OnAlertClickListener {
                         scheduleAlarmForAlert(alert)
                     }
                 }
-
                 alertScreenViewModel.insertToAlerts(alert)
                 alertDialog.dismiss()
             }

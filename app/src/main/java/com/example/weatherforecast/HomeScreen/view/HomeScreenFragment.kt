@@ -75,10 +75,6 @@ class HomeScreenFragment : Fragment() {
     private lateinit var recyclerViewFiveDayForecast : RecyclerView
 
 
-//    private lateinit var alertScreenViewModel: AlertScreenViewModel
-//    private lateinit var alertScreenViewModelFactory: AlertScreenViewModelFactory
-
-
 
     private lateinit var binding: FragmentHomeScreenBinding
 
@@ -153,62 +149,6 @@ class HomeScreenFragment : Fragment() {
         homeScreenViewModel = ViewModelProvider(this, homeScreenViewModelFactory).get(HomeScreenViewModel::class.java)
 
 
-//        alertScreenViewModelFactory = AlertScreenViewModelFactory(
-//            WeatherRepositoryImpl.getInstance
-//                (WeatherRemoteDataSourceImpl.getInstance() ,  WeatherLocalDataSourceImpl(requireContext())))
-//
-//        alertScreenViewModel = ViewModelProvider(this, alertScreenViewModelFactory).get(
-//            AlertScreenViewModel::class.java)
-
-
-//        lifecycleScope.launch{
-//            homeScreenViewModel.currentWeather.collectLatest{result ->
-//                when (result){
-//                    is WeatherState.Loading -> {
-//                        progressBarHome.visibility = View.VISIBLE
-//                        //recyclerViewFavoriteCities.visibility = View.GONE
-//
-//                        Log.i(TAG, "onCreate: loading")
-//                    }
-//                    is WeatherState.Success -> {
-//                        updateUI(result.weatherResponse)
-//                        progressBarHome.visibility = View.GONE
-//                        //homeScreenViewModel.insertCurrentWeather(result.weatherResponse)
-//                       // recyclerViewFavoriteCities.visibility = View.VISIBLE
-//                       // favoriteCityAdapter.setCities(result.favoriteCity)
-//                    }
-//                    else -> {
-//                        progressBarHome.visibility = View.GONE
-//                        Toast.makeText(requireContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//        }
-
-//        lifecycleScope.launch{
-//            alertScreenViewModel.currentWeatherAlert.collectLatest{result ->
-//                when (result){
-//                    is WeatherAlertState.Loading -> {
-//
-//                        Log.i(TAG, "onCreate: loading")
-//                    }
-//                    is WeatherAlertState.Success -> {
-//                        //updateUI(result.weatherResponse)
-//
-//                        testAlert(result.weatherAlertResponse)
-//
-//                        Log.i(TAG, "onViewCreated: alerts : ${result.weatherAlertResponse.alerts}   , daily list :  ${result.weatherAlertResponse.dailyList}")
-//                        Log.i(TAG, "onViewCreated: hourlyList : ${result.weatherAlertResponse.hourlylist}")
-//                        Log.i(TAG, "onViewCreated: current : ${result.weatherAlertResponse.current}")
-//                        Log.i(TAG, "onViewCreated: Minutely : ${result.weatherAlertResponse.minutelyList}")
-//
-//                    }
-//                    else -> {
-//                        Toast.makeText(requireContext(), "Failed to fetch cities", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//        }
 
         hourlyForecastAdapter = HourlyForecastAdapter()
 
